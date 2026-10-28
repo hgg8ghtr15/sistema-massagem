@@ -3,11 +3,221 @@
   "targetFamily": "sql",
   "target": "postgres",
   "profileHash": "3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2",
-  "roots": {},
+  "roots": {
+    "Agendamento": {
+      "model": "Agendamento",
+      "namespace": "public"
+    },
+    "Usuario": {
+      "model": "Usuario",
+      "namespace": "public"
+    }
+  },
   "domain": {
     "namespaces": {
       "public": {
-        "models": {}
+        "models": {
+          "Agendamento": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "dataHora": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "observacoes": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "status": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "usuarioId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "usuario": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "usuarioId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "dataHora": {
+                  "column": "dataHora"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "observacoes": {
+                  "column": "observacoes"
+                },
+                "status": {
+                  "column": "status"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "usuarioId": {
+                  "column": "usuarioId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Agendamento"
+            }
+          },
+          "Usuario": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "email": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nome": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "senha": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              }
+            },
+            "relations": {
+              "agendamentos": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "usuarioId"
+                  ]
+                },
+                "to": {
+                  "model": "Agendamento",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "email": {
+                  "column": "email"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "nome": {
+                  "column": "nome"
+                },
+                "senha": {
+                  "column": "senha"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Usuario"
+            }
+          }
+        }
       }
     }
   },
@@ -15,13 +225,202 @@
     "namespaces": {
       "public": {
         "entries": {
-          "table": {}
+          "table": {
+            "Agendamento": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "dataHora": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "id": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nullable": false
+                },
+                "observacoes": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "status": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "pendente"
+                  },
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "usuarioId": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "restrict",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "usuarioId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Agendamento"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Usuario"
+                  }
+                }
+              ],
+              "indexes": [],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "Usuario": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "email": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nullable": false
+                },
+                "nome": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "senha": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "columns": [
+                    "email"
+                  ],
+                  "name": "Usuario_email_key",
+                  "unique": true
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            }
+          }
         },
         "id": "public",
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "0c0734babd6eeb868fee1f281ca96963022475611560e9f170f465daa35f8599"
+    "storageHash": "f04a8ee016dcf9d244777c5241ed39ee3c6267ef5c0b399a36e66074c7d97fdb"
+  },
+  "execution": {
+    "executionHash": "bc1ccdf2e034ab0351da92a99d109c84f20912f50d8911fe8124eabd626b1498",
+    "mutations": {
+      "defaults": [
+        {
+          "onCreate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Agendamento",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Usuario",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        }
+      ]
+    }
   },
   "capabilities": {
     "postgres": {

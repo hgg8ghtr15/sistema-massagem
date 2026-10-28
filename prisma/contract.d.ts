@@ -23,8 +23,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'0c0734babd6eeb868fee1f281ca96963022475611560e9f170f465daa35f8599'>;
-export type ExecutionHash = ExecutionHashBase<string>;
+  StorageHashBase<'f04a8ee016dcf9d244777c5241ed39ee3c6267ef5c0b399a36e66074c7d97fdb'>;
+export type ExecutionHash =
+  ExecutionHashBase<'bc1ccdf2e034ab0351da92a99d109c84f20912f50d8911fe8124eabd626b1498'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -268,10 +269,35 @@ export type StorageColumnInputTypes = ColumnTypesFromStorage<
   'input'
 >;
 
-export namespace Models {}
+export namespace Models {
+  export type public_Agendamento = {
+    createdAt: FieldOutputTypes['public']['Agendamento']['createdAt'];
+    dataHora: FieldOutputTypes['public']['Agendamento']['dataHora'];
+    id: FieldOutputTypes['public']['Agendamento']['id'];
+    observacoes: FieldOutputTypes['public']['Agendamento']['observacoes'];
+    status: FieldOutputTypes['public']['Agendamento']['status'];
+    updatedAt: FieldOutputTypes['public']['Agendamento']['updatedAt'];
+    usuarioId: FieldOutputTypes['public']['Agendamento']['usuarioId'];
+    usuario: public_Usuario;
+    readonly [RelationKeys]?: 'usuario';
+  };
+  export type public_Usuario = {
+    createdAt: FieldOutputTypes['public']['Usuario']['createdAt'];
+    email: FieldOutputTypes['public']['Usuario']['email'];
+    id: FieldOutputTypes['public']['Usuario']['id'];
+    nome: FieldOutputTypes['public']['Usuario']['nome'];
+    senha: FieldOutputTypes['public']['Usuario']['senha'];
+    updatedAt: FieldOutputTypes['public']['Usuario']['updatedAt'];
+    agendamentos: public_Agendamento[];
+    readonly [RelationKeys]?: 'agendamentos';
+  };
+}
 
 export declare const models: {
-  public: {};
+  public: {
+    Agendamento: Models.public_Agendamento;
+    Usuario: Models.public_Usuario;
+  };
 };
 
 export type TypeMaps = TypeMapsType<
@@ -290,7 +316,142 @@ type ContractBase = Omit<
       readonly public: {
         readonly id: 'public';
         readonly kind: 'postgres-schema';
-        readonly entries: { readonly table: {} };
+        readonly entries: {
+          readonly table: {
+            readonly Agendamento: {
+              columns: {
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly dataHora: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                  readonly many: false;
+                };
+                readonly observacoes: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly status: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'pendente'>;
+                  };
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly usuarioId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Agendamento';
+                    readonly columns: readonly ['usuarioId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Usuario';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly Usuario: {
+              columns: {
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly email: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                  readonly many: false;
+                };
+                readonly nome: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly senha: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'Usuario_email_key';
+                  readonly columns: readonly ['email'];
+                  readonly unique: true;
+                },
+              ];
+              foreignKeys: readonly [];
+            };
+          };
+        };
       };
     };
     readonly storageHash: StorageHash;
@@ -299,11 +460,150 @@ type ContractBase = Omit<
 > & {
   readonly target: 'postgres';
   readonly targetFamily: 'sql';
-  readonly roots: Record<string, never>;
+  readonly roots: {
+    readonly Agendamento: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'Agendamento';
+    };
+    readonly Usuario: { readonly namespace: 'public' & NamespaceId; readonly model: 'Usuario' };
+  };
   readonly domain: {
     readonly namespaces: {
       readonly public: {
-        readonly models: Record<string, never>;
+        readonly models: {
+          readonly Agendamento: {
+            readonly fields: {
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly dataHora: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly observacoes: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly usuarioId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly usuario: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['usuarioId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'Agendamento';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly dataHora: { readonly column: 'dataHora' };
+                readonly id: { readonly column: 'id' };
+                readonly observacoes: { readonly column: 'observacoes' };
+                readonly status: { readonly column: 'status' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly usuarioId: { readonly column: 'usuarioId' };
+              };
+            };
+          };
+          readonly Usuario: {
+            readonly fields: {
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly email: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly nome: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly senha: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly agendamentos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Agendamento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['usuarioId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'Usuario';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly email: { readonly column: 'email' };
+                readonly id: { readonly column: 'id' };
+                readonly nome: { readonly column: 'nome' };
+                readonly senha: { readonly column: 'senha' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
+        };
       };
     };
   };
@@ -335,6 +635,31 @@ type ContractBase = Omit<
     };
   };
   readonly extensions: {};
+  readonly execution: {
+    readonly executionHash: ExecutionHash;
+    readonly mutations: {
+      readonly defaults: readonly [
+        {
+          readonly onCreate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'Agendamento';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'Usuario';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+      ];
+    };
+  };
   readonly meta: {};
 
   readonly profileHash: ProfileHash;
