@@ -13,6 +13,7 @@ model Usuario {
   email        String        @unique
   nome         String
   senha        String
+  perfil       String        @default("CLIENTE")
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   agendamentos Agendamento[]
@@ -27,4 +28,11 @@ model Agendamento {
   usuario     Usuario  @relation(fields: [usuarioId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model TokenRevogado {
+  jti       String   @id
+  expiresAt DateTime
+
+  @@index([expiresAt])
 }

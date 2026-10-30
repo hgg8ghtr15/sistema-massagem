@@ -1,0 +1,50 @@
+[
+  {
+    "id": "index.TokenRevogado.TokenRevogado_expiresAt_idx",
+    "label": "Create index \"TokenRevogado_expiresAt_idx\" on \"TokenRevogado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "TokenRevogado_expiresAt_idx",
+        "table": "TokenRevogado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"TokenRevogado_expiresAt_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TokenRevogado_expiresAt_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"TokenRevogado_expiresAt_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"TokenRevogado_expiresAt_idx\"",
+        "sql": "CREATE INDEX \"TokenRevogado_expiresAt_idx\" ON \"public\".\"TokenRevogado\" (\"expiresAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"TokenRevogado_expiresAt_idx\" exists on \"TokenRevogado\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"TokenRevogado_expiresAt_idx\"",
+          "i",
+          "I",
+          "\"public\".\"TokenRevogado\"",
+          "btree",
+          "[\"expiresAt\"]"
+        ]
+      }
+    ]
+  }
+]

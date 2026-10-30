@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'f04a8ee016dcf9d244777c5241ed39ee3c6267ef5c0b399a36e66074c7d97fdb'>;
+  StorageHashBase<'1f08830d912ae5f7ccff05282ec63521f39038aa8b301ce472a77561dfe3eddb'>;
 export type ExecutionHash =
   ExecutionHashBase<'bc1ccdf2e034ab0351da92a99d109c84f20912f50d8911fe8124eabd626b1498'>;
 export type ProfileHash =
@@ -281,11 +281,17 @@ export namespace Models {
     usuario: public_Usuario;
     readonly [RelationKeys]?: 'usuario';
   };
+  export type public_TokenRevogado = {
+    expiresAt: FieldOutputTypes['public']['TokenRevogado']['expiresAt'];
+    jti: FieldOutputTypes['public']['TokenRevogado']['jti'];
+    readonly [RelationKeys]?: never;
+  };
   export type public_Usuario = {
     createdAt: FieldOutputTypes['public']['Usuario']['createdAt'];
     email: FieldOutputTypes['public']['Usuario']['email'];
     id: FieldOutputTypes['public']['Usuario']['id'];
     nome: FieldOutputTypes['public']['Usuario']['nome'];
+    perfil: FieldOutputTypes['public']['Usuario']['perfil'];
     senha: FieldOutputTypes['public']['Usuario']['senha'];
     updatedAt: FieldOutputTypes['public']['Usuario']['updatedAt'];
     agendamentos: public_Agendamento[];
@@ -296,6 +302,7 @@ export namespace Models {
 export declare const models: {
   public: {
     Agendamento: Models.public_Agendamento;
+    TokenRevogado: Models.public_TokenRevogado;
     Usuario: Models.public_Usuario;
   };
 };
@@ -393,6 +400,33 @@ type ContractBase = Omit<
                 },
               ];
             };
+            readonly TokenRevogado: {
+              columns: {
+                readonly expiresAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly jti: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['jti'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'TokenRevogado_expiresAt_idx';
+                  readonly columns: readonly ['expiresAt'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [];
+            };
             readonly Usuario: {
               columns: {
                 readonly createdAt: {
@@ -423,6 +457,16 @@ type ContractBase = Omit<
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
                   readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly perfil: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'CLIENTE'>;
+                  };
                   readonly many: false;
                 };
                 readonly senha: {
@@ -464,6 +508,10 @@ type ContractBase = Omit<
     readonly Agendamento: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Agendamento';
+    };
+    readonly TokenRevogado: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'TokenRevogado';
     };
     readonly Usuario: { readonly namespace: 'public' & NamespaceId; readonly model: 'Usuario' };
   };
@@ -542,6 +590,31 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly TokenRevogado: {
+            readonly fields: {
+              readonly expiresAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly jti: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: Record<string, never>;
+            readonly storage: {
+              readonly table: 'TokenRevogado';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly expiresAt: { readonly column: 'expiresAt' };
+                readonly jti: { readonly column: 'jti' };
+              };
+            };
+          };
           readonly Usuario: {
             readonly fields: {
               readonly createdAt: {
@@ -561,6 +634,10 @@ type ContractBase = Omit<
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
               };
               readonly nome: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly perfil: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
@@ -598,6 +675,7 @@ type ContractBase = Omit<
                 readonly email: { readonly column: 'email' };
                 readonly id: { readonly column: 'id' };
                 readonly nome: { readonly column: 'nome' };
+                readonly perfil: { readonly column: 'perfil' };
                 readonly senha: { readonly column: 'senha' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
               };

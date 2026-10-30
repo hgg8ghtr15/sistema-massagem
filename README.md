@@ -66,6 +66,15 @@ docker compose down -v
 $ npm install
 ```
 
+## Usuários e perfis
+
+- `POST /api/usuarios/register` cadastra um cliente com o perfil `CLIENTE`.
+- `POST /api/auth/login` autentica um usuário.
+- `POST /api/auth/logout` encerra a sessão e revoga o token JWT atual; envie o token no cabeçalho `Authorization: Bearer <token>`.
+- `PATCH /api/usuarios/:id/perfil` altera o perfil e exige autenticação de um usuário `ADMIN`.
+
+Os perfis disponíveis são `CLIENTE` (padrão), `ADMIN` (administração e atribuição de perfis), `ADMINISTRATIVO` (agendamentos, pagamentos e recebimentos) e `MASSAGISTA` (atendimentos e materiais da clínica). Cada usuário possui um perfil, alterável pelo administrador. O cadastro público não aceita perfil no corpo da requisição. Para definir o primeiro administrador, promova uma conta diretamente no banco de dados, por exemplo: `UPDATE "Usuario" SET "perfil" = 'ADMIN' WHERE "email" = 'email-da-conta';`. Após o logout, o token revogado não pode mais ser usado nas rotas protegidas; a sessão só pode ser retomada após novo login.
+
 ---
 
 ## 🚀 Executando a Aplicação

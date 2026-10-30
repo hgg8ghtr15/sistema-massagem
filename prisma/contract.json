@@ -8,6 +8,10 @@
       "model": "Agendamento",
       "namespace": "public"
     },
+    "TokenRevogado": {
+      "model": "TokenRevogado",
+      "namespace": "public"
+    },
     "Usuario": {
       "model": "Usuario",
       "namespace": "public"
@@ -124,6 +128,40 @@
               "table": "Agendamento"
             }
           },
+          "TokenRevogado": {
+            "fields": {
+              "expiresAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "jti": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {},
+            "storage": {
+              "fields": {
+                "expiresAt": {
+                  "column": "expiresAt"
+                },
+                "jti": {
+                  "column": "jti"
+                }
+              },
+              "namespaceId": "public",
+              "table": "TokenRevogado"
+            }
+          },
           "Usuario": {
             "fields": {
               "createdAt": {
@@ -151,6 +189,13 @@
                 }
               },
               "nome": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "perfil": {
                 "nullable": false,
                 "type": {
                   "codecId": "pg/text@1",
@@ -205,6 +250,9 @@
                 },
                 "nome": {
                   "column": "nome"
+                },
+                "perfil": {
+                  "column": "perfil"
                 },
                 "senha": {
                   "column": "senha"
@@ -313,6 +361,39 @@
               },
               "uniques": []
             },
+            "TokenRevogado": {
+              "columns": {
+                "expiresAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "jti": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "columns": [
+                    "expiresAt"
+                  ],
+                  "name": "TokenRevogado_expiresAt_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "jti"
+                ]
+              },
+              "uniques": []
+            },
             "Usuario": {
               "columns": {
                 "createdAt": {
@@ -344,6 +425,15 @@
                 "nome": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
+                  "nullable": false
+                },
+                "perfil": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "default": {
+                    "kind": "literal",
+                    "value": "CLIENTE"
+                  },
                   "nullable": false
                 },
                 "senha": {
@@ -383,7 +473,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "f04a8ee016dcf9d244777c5241ed39ee3c6267ef5c0b399a36e66074c7d97fdb"
+    "storageHash": "1f08830d912ae5f7ccff05282ec63521f39038aa8b301ce472a77561dfe3eddb"
   },
   "execution": {
     "executionHash": "bc1ccdf2e034ab0351da92a99d109c84f20912f50d8911fe8124eabd626b1498",

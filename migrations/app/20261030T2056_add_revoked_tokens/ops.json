@@ -1,0 +1,51 @@
+[
+  {
+    "id": "table.TokenRevogado",
+    "label": "Create table \"TokenRevogado\"",
+    "summary": "Creates table \"TokenRevogado\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "TokenRevogado"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"TokenRevogado\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"TokenRevogado\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"TokenRevogado\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"TokenRevogado\"",
+        "sql": "CREATE TABLE \"public\".\"TokenRevogado\" (\n  \"expiresAt\" timestamp(3) NOT NULL,\n  \"jti\" text NOT NULL,\n  PRIMARY KEY (\"jti\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"TokenRevogado\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"TokenRevogado\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"TokenRevogado\""
+        }
+      }
+    ]
+  }
+]
