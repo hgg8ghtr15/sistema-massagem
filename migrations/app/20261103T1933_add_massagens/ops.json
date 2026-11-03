@@ -1,0 +1,694 @@
+[
+  {
+    "id": "table.Massagem",
+    "label": "Create table \"Massagem\"",
+    "summary": "Creates table \"Massagem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Massagem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Massagem\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Massagem\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Massagem\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Massagem\"",
+        "sql": "CREATE TABLE \"public\".\"Massagem\" (\n  \"ativo\" bool DEFAULT true NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"descricao\" text NOT NULL,\n  \"duracaoMinutos\" int4 NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"nome\" text NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  \"valorCentavos\" int4 NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Massagem\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Massagem\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Massagem\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.MassagemMaterial",
+    "label": "Create table \"MassagemMaterial\"",
+    "summary": "Creates table \"MassagemMaterial\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "MassagemMaterial"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"MassagemMaterial\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MassagemMaterial\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"MassagemMaterial\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"MassagemMaterial\"",
+        "sql": "CREATE TABLE \"public\".\"MassagemMaterial\" (\n  \"massagemId\" int4 NOT NULL,\n  \"materialId\" int4 NOT NULL,\n  \"quantidade\" int4 NOT NULL,\n  \"unidade\" text NOT NULL,\n  PRIMARY KEY (\"massagemId\", \"materialId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"MassagemMaterial\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"MassagemMaterial\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"MassagemMaterial\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.MassagistaMassagem",
+    "label": "Create table \"MassagistaMassagem\"",
+    "summary": "Creates table \"MassagistaMassagem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "MassagistaMassagem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"MassagistaMassagem\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MassagistaMassagem\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"MassagistaMassagem\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"MassagistaMassagem\"",
+        "sql": "CREATE TABLE \"public\".\"MassagistaMassagem\" (\n  \"massagemId\" int4 NOT NULL,\n  \"usuarioId\" int4 NOT NULL,\n  PRIMARY KEY (\"usuarioId\", \"massagemId\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"MassagistaMassagem\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"MassagistaMassagem\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"MassagistaMassagem\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.Material",
+    "label": "Create table \"Material\"",
+    "summary": "Creates table \"Material\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Material"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Material\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Material\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Material\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Material\"",
+        "sql": "CREATE TABLE \"public\".\"Material\" (\n  \"ativo\" bool DEFAULT true NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"descricao\" text,\n  \"id\" SERIAL NOT NULL,\n  \"nome\" text NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Material\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Material\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Material\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "index.Massagem.Massagem_ativo_idx",
+    "label": "Create index \"Massagem_ativo_idx\" on \"Massagem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Massagem_ativo_idx",
+        "table": "Massagem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Massagem_ativo_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Massagem_ativo_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Massagem_ativo_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Massagem_ativo_idx\"",
+        "sql": "CREATE INDEX \"Massagem_ativo_idx\" ON \"public\".\"Massagem\" (\"ativo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Massagem_ativo_idx\" exists on \"Massagem\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Massagem_ativo_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Massagem\"",
+          "btree",
+          "[\"ativo\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Massagem.Massagem_nome_key",
+    "label": "Create index \"Massagem_nome_key\" on \"Massagem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Massagem_nome_key",
+        "table": "Massagem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Massagem_nome_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Massagem_nome_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Massagem_nome_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Massagem_nome_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Massagem_nome_key\" ON \"public\".\"Massagem\" (\"nome\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Massagem_nome_key\" exists on \"Massagem\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Massagem_nome_key\"",
+          "i",
+          "I",
+          "\"public\".\"Massagem\"",
+          "btree",
+          "[\"nome\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.MassagemMaterial.MassagemMaterial_materialId_idx",
+    "label": "Create index \"MassagemMaterial_materialId_idx\" on \"MassagemMaterial\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "MassagemMaterial_materialId_idx",
+        "table": "MassagemMaterial"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"MassagemMaterial_materialId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MassagemMaterial_materialId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"MassagemMaterial_materialId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"MassagemMaterial_materialId_idx\"",
+        "sql": "CREATE INDEX \"MassagemMaterial_materialId_idx\" ON \"public\".\"MassagemMaterial\" (\"materialId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"MassagemMaterial_materialId_idx\" exists on \"MassagemMaterial\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"MassagemMaterial_materialId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"MassagemMaterial\"",
+          "btree",
+          "[\"materialId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.MassagistaMassagem.MassagistaMassagem_massagemId_idx",
+    "label": "Create index \"MassagistaMassagem_massagemId_idx\" on \"MassagistaMassagem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "MassagistaMassagem_massagemId_idx",
+        "table": "MassagistaMassagem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"MassagistaMassagem_massagemId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MassagistaMassagem_massagemId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"MassagistaMassagem_massagemId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"MassagistaMassagem_massagemId_idx\"",
+        "sql": "CREATE INDEX \"MassagistaMassagem_massagemId_idx\" ON \"public\".\"MassagistaMassagem\" (\"massagemId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"MassagistaMassagem_massagemId_idx\" exists on \"MassagistaMassagem\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"MassagistaMassagem_massagemId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"MassagistaMassagem\"",
+          "btree",
+          "[\"massagemId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Material.Material_ativo_idx",
+    "label": "Create index \"Material_ativo_idx\" on \"Material\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Material_ativo_idx",
+        "table": "Material"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Material_ativo_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Material_ativo_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Material_ativo_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Material_ativo_idx\"",
+        "sql": "CREATE INDEX \"Material_ativo_idx\" ON \"public\".\"Material\" (\"ativo\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Material_ativo_idx\" exists on \"Material\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Material_ativo_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Material\"",
+          "btree",
+          "[\"ativo\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Material.Material_nome_key",
+    "label": "Create index \"Material_nome_key\" on \"Material\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Material_nome_key",
+        "table": "Material"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Material_nome_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Material_nome_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Material_nome_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Material_nome_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Material_nome_key\" ON \"public\".\"Material\" (\"nome\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Material_nome_key\" exists on \"Material\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Material_nome_key\"",
+          "i",
+          "I",
+          "\"public\".\"Material\"",
+          "btree",
+          "[\"nome\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.MassagemMaterial.MassagemMaterial_massagemId_fkey",
+    "label": "Add foreign key \"MassagemMaterial_massagemId_fkey\" on \"MassagemMaterial\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "MassagemMaterial_massagemId_fkey",
+        "table": "MassagemMaterial"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"MassagemMaterial_massagemId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "MassagemMaterial_massagemId_fkey",
+          "public",
+          "\"public\".\"MassagemMaterial\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"MassagemMaterial_massagemId_fkey\" on \"MassagemMaterial\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"MassagemMaterial_massagemId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"MassagemMaterial\"\nADD CONSTRAINT \"MassagemMaterial_massagemId_fkey\"\nFOREIGN KEY (\"massagemId\")\nREFERENCES \"public\".\"Massagem\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"MassagemMaterial_massagemId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "MassagemMaterial_massagemId_fkey",
+          "public",
+          "\"public\".\"MassagemMaterial\"",
+          "f",
+          "[\"massagemId\"]",
+          "\"public\".\"Massagem\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.MassagemMaterial.MassagemMaterial_materialId_fkey",
+    "label": "Add foreign key \"MassagemMaterial_materialId_fkey\" on \"MassagemMaterial\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "MassagemMaterial_materialId_fkey",
+        "table": "MassagemMaterial"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"MassagemMaterial_materialId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "MassagemMaterial_materialId_fkey",
+          "public",
+          "\"public\".\"MassagemMaterial\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"MassagemMaterial_materialId_fkey\" on \"MassagemMaterial\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"MassagemMaterial_materialId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"MassagemMaterial\"\nADD CONSTRAINT \"MassagemMaterial_materialId_fkey\"\nFOREIGN KEY (\"materialId\")\nREFERENCES \"public\".\"Material\" (\"id\")\nON DELETE RESTRICT\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"MassagemMaterial_materialId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "MassagemMaterial_materialId_fkey",
+          "public",
+          "\"public\".\"MassagemMaterial\"",
+          "f",
+          "[\"materialId\"]",
+          "\"public\".\"Material\"",
+          "[\"id\"]",
+          "r",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.MassagistaMassagem.MassagistaMassagem_usuarioId_fkey",
+    "label": "Add foreign key \"MassagistaMassagem_usuarioId_fkey\" on \"MassagistaMassagem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "MassagistaMassagem_usuarioId_fkey",
+        "table": "MassagistaMassagem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"MassagistaMassagem_usuarioId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "MassagistaMassagem_usuarioId_fkey",
+          "public",
+          "\"public\".\"MassagistaMassagem\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"MassagistaMassagem_usuarioId_fkey\" on \"MassagistaMassagem\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"MassagistaMassagem_usuarioId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"MassagistaMassagem\"\nADD CONSTRAINT \"MassagistaMassagem_usuarioId_fkey\"\nFOREIGN KEY (\"usuarioId\")\nREFERENCES \"public\".\"Usuario\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"MassagistaMassagem_usuarioId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "MassagistaMassagem_usuarioId_fkey",
+          "public",
+          "\"public\".\"MassagistaMassagem\"",
+          "f",
+          "[\"usuarioId\"]",
+          "\"public\".\"Usuario\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.MassagistaMassagem.MassagistaMassagem_massagemId_fkey",
+    "label": "Add foreign key \"MassagistaMassagem_massagemId_fkey\" on \"MassagistaMassagem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "MassagistaMassagem_massagemId_fkey",
+        "table": "MassagistaMassagem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"MassagistaMassagem_massagemId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "MassagistaMassagem_massagemId_fkey",
+          "public",
+          "\"public\".\"MassagistaMassagem\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"MassagistaMassagem_massagemId_fkey\" on \"MassagistaMassagem\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"MassagistaMassagem_massagemId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"MassagistaMassagem\"\nADD CONSTRAINT \"MassagistaMassagem_massagemId_fkey\"\nFOREIGN KEY (\"massagemId\")\nREFERENCES \"public\".\"Massagem\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"MassagistaMassagem_massagemId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "MassagistaMassagem_massagemId_fkey",
+          "public",
+          "\"public\".\"MassagistaMassagem\"",
+          "f",
+          "[\"massagemId\"]",
+          "\"public\".\"Massagem\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  }
+]

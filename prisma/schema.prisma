@@ -36,3 +36,52 @@ model TokenRevogado {
 
   @@index([expiresAt])
 }
+
+model Massagem {
+  id              Int                 @id @default(autoincrement())
+  nome            String              @unique
+  descricao       String
+  duracaoMinutos  Int
+  valorCentavos   Int
+  ativo           Boolean             @default(true)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  materiais       MassagemMaterial[]
+  massagistas     MassagistaMassagem[]
+
+  @@index([ativo])
+}
+
+model Material {
+  id          Int                 @id @default(autoincrement())
+  nome        String              @unique
+  descricao   String?
+  ativo       Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  massagens   MassagemMaterial[]
+
+  @@index([ativo])
+}
+
+model MassagemMaterial {
+  massagemId  Int
+  materialId  Int
+  quantidade  Int
+  unidade     String
+  massagem    Massagem @relation(fields: [massagemId], references: [id], onDelete: Cascade)
+  material    Material @relation(fields: [materialId], references: [id], onDelete: Restrict)
+
+  @@id([massagemId, materialId])
+  @@index([materialId])
+}
+
+model MassagistaMassagem {
+  usuarioId   Int
+  massagemId  Int
+  usuario     Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  massagem    Massagem @relation(fields: [massagemId], references: [id], onDelete: Cascade)
+
+  @@id([usuarioId, massagemId])
+  @@index([massagemId])
+}

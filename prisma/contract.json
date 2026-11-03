@@ -8,6 +8,22 @@
       "model": "Agendamento",
       "namespace": "public"
     },
+    "Massagem": {
+      "model": "Massagem",
+      "namespace": "public"
+    },
+    "MassagemMaterial": {
+      "model": "MassagemMaterial",
+      "namespace": "public"
+    },
+    "MassagistaMassagem": {
+      "model": "MassagistaMassagem",
+      "namespace": "public"
+    },
+    "Material": {
+      "model": "Material",
+      "namespace": "public"
+    },
     "TokenRevogado": {
       "model": "TokenRevogado",
       "namespace": "public"
@@ -126,6 +142,375 @@
               },
               "namespaceId": "public",
               "table": "Agendamento"
+            }
+          },
+          "Massagem": {
+            "fields": {
+              "ativo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "descricao": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "duracaoMinutos": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nome": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "valorCentavos": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "massagistas": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "massagemId"
+                  ]
+                },
+                "to": {
+                  "model": "MassagistaMassagem",
+                  "namespace": "public"
+                }
+              },
+              "materiais": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "massagemId"
+                  ]
+                },
+                "to": {
+                  "model": "MassagemMaterial",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "ativo": {
+                  "column": "ativo"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "descricao": {
+                  "column": "descricao"
+                },
+                "duracaoMinutos": {
+                  "column": "duracaoMinutos"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "nome": {
+                  "column": "nome"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "valorCentavos": {
+                  "column": "valorCentavos"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Massagem"
+            }
+          },
+          "MassagemMaterial": {
+            "fields": {
+              "massagemId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "materialId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "quantidade": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "unidade": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "massagem": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "massagemId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Massagem",
+                  "namespace": "public"
+                }
+              },
+              "material": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "materialId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Material",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "massagemId": {
+                  "column": "massagemId"
+                },
+                "materialId": {
+                  "column": "materialId"
+                },
+                "quantidade": {
+                  "column": "quantidade"
+                },
+                "unidade": {
+                  "column": "unidade"
+                }
+              },
+              "namespaceId": "public",
+              "table": "MassagemMaterial"
+            }
+          },
+          "MassagistaMassagem": {
+            "fields": {
+              "massagemId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "usuarioId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "massagem": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "massagemId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Massagem",
+                  "namespace": "public"
+                }
+              },
+              "usuario": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "usuarioId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "Usuario",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "massagemId": {
+                  "column": "massagemId"
+                },
+                "usuarioId": {
+                  "column": "usuarioId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "MassagistaMassagem"
+            }
+          },
+          "Material": {
+            "fields": {
+              "ativo": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "descricao": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "nome": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamp-string@1",
+                  "kind": "scalar",
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              }
+            },
+            "relations": {
+              "massagens": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "materialId"
+                  ]
+                },
+                "to": {
+                  "model": "MassagemMaterial",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "ativo": {
+                  "column": "ativo"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "descricao": {
+                  "column": "descricao"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "nome": {
+                  "column": "nome"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Material"
             }
           },
           "TokenRevogado": {
@@ -361,6 +746,318 @@
               },
               "uniques": []
             },
+            "Massagem": {
+              "columns": {
+                "ativo": {
+                  "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "descricao": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "duracaoMinutos": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nullable": false
+                },
+                "nome": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "valorCentavos": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "columns": [
+                    "ativo"
+                  ],
+                  "name": "Massagem_ativo_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "nome"
+                  ],
+                  "name": "Massagem_nome_key",
+                  "unique": true
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "MassagemMaterial": {
+              "columns": {
+                "massagemId": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                },
+                "materialId": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                },
+                "quantidade": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                },
+                "unidade": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "massagemId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "MassagemMaterial"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Massagem"
+                  }
+                },
+                {
+                  "index": {
+                    "name": "MassagemMaterial_materialId_idx"
+                  },
+                  "onDelete": "restrict",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "materialId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "MassagemMaterial"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Material"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "materialId"
+                  ],
+                  "name": "MassagemMaterial_materialId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "massagemId",
+                  "materialId"
+                ]
+              },
+              "uniques": []
+            },
+            "MassagistaMassagem": {
+              "columns": {
+                "massagemId": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                },
+                "usuarioId": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "usuarioId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "MassagistaMassagem"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Usuario"
+                  }
+                },
+                {
+                  "index": {
+                    "name": "MassagistaMassagem_massagemId_idx"
+                  },
+                  "onDelete": "cascade",
+                  "onUpdate": "cascade",
+                  "source": {
+                    "columns": [
+                      "massagemId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "MassagistaMassagem"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Massagem"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "massagemId"
+                  ],
+                  "name": "MassagistaMassagem_massagemId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "usuarioId",
+                  "massagemId"
+                ]
+              },
+              "uniques": []
+            },
+            "Material": {
+              "columns": {
+                "ativo": {
+                  "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
+                  "default": {
+                    "kind": "literal",
+                    "value": true
+                  },
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                },
+                "descricao": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nullable": false
+                },
+                "nome": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamp-string@1",
+                  "dataType": "pg/timestamp",
+                  "nullable": false,
+                  "typeParams": {
+                    "precision": 3
+                  }
+                }
+              },
+              "foreignKeys": [],
+              "indexes": [
+                {
+                  "columns": [
+                    "ativo"
+                  ],
+                  "name": "Material_ativo_idx",
+                  "unique": false
+                },
+                {
+                  "columns": [
+                    "nome"
+                  ],
+                  "name": "Material_nome_key",
+                  "unique": true
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
             "TokenRevogado": {
               "columns": {
                 "expiresAt": {
@@ -473,10 +1170,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "1f08830d912ae5f7ccff05282ec63521f39038aa8b301ce472a77561dfe3eddb"
+    "storageHash": "f650dd73850c53be05baf09ced1c23b27d0776e97a7bf74b4e92776d8ff009c5"
   },
   "execution": {
-    "executionHash": "bc1ccdf2e034ab0351da92a99d109c84f20912f50d8911fe8124eabd626b1498",
+    "executionHash": "6fdf9b44786d6ac8722f89de33ca6101f2aa8a20f3459e7c8b22f4650dd748c2",
     "mutations": {
       "defaults": [
         {
@@ -490,6 +1187,36 @@
           },
           "ref": {
             "entry": "Agendamento",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Massagem",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Material",
             "field": "updatedAt",
             "namespace": "public"
           }

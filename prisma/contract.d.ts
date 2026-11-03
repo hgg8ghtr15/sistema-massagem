@@ -23,9 +23,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'1f08830d912ae5f7ccff05282ec63521f39038aa8b301ce472a77561dfe3eddb'>;
+  StorageHashBase<'f650dd73850c53be05baf09ced1c23b27d0776e97a7bf74b4e92776d8ff009c5'>;
 export type ExecutionHash =
-  ExecutionHashBase<'bc1ccdf2e034ab0351da92a99d109c84f20912f50d8911fe8124eabd626b1498'>;
+  ExecutionHashBase<'6fdf9b44786d6ac8722f89de33ca6101f2aa8a20f3459e7c8b22f4650dd748c2'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -281,6 +281,45 @@ export namespace Models {
     usuario: public_Usuario;
     readonly [RelationKeys]?: 'usuario';
   };
+  export type public_Massagem = {
+    ativo: FieldOutputTypes['public']['Massagem']['ativo'];
+    createdAt: FieldOutputTypes['public']['Massagem']['createdAt'];
+    descricao: FieldOutputTypes['public']['Massagem']['descricao'];
+    duracaoMinutos: FieldOutputTypes['public']['Massagem']['duracaoMinutos'];
+    id: FieldOutputTypes['public']['Massagem']['id'];
+    nome: FieldOutputTypes['public']['Massagem']['nome'];
+    updatedAt: FieldOutputTypes['public']['Massagem']['updatedAt'];
+    valorCentavos: FieldOutputTypes['public']['Massagem']['valorCentavos'];
+    massagistas: public_MassagistaMassagem[];
+    materiais: public_MassagemMaterial[];
+    readonly [RelationKeys]?: 'massagistas' | 'materiais';
+  };
+  export type public_MassagemMaterial = {
+    massagemId: FieldOutputTypes['public']['MassagemMaterial']['massagemId'];
+    materialId: FieldOutputTypes['public']['MassagemMaterial']['materialId'];
+    quantidade: FieldOutputTypes['public']['MassagemMaterial']['quantidade'];
+    unidade: FieldOutputTypes['public']['MassagemMaterial']['unidade'];
+    massagem: public_Massagem;
+    material: public_Material;
+    readonly [RelationKeys]?: 'massagem' | 'material';
+  };
+  export type public_MassagistaMassagem = {
+    massagemId: FieldOutputTypes['public']['MassagistaMassagem']['massagemId'];
+    usuarioId: FieldOutputTypes['public']['MassagistaMassagem']['usuarioId'];
+    massagem: public_Massagem;
+    usuario: public_Usuario;
+    readonly [RelationKeys]?: 'massagem' | 'usuario';
+  };
+  export type public_Material = {
+    ativo: FieldOutputTypes['public']['Material']['ativo'];
+    createdAt: FieldOutputTypes['public']['Material']['createdAt'];
+    descricao: FieldOutputTypes['public']['Material']['descricao'];
+    id: FieldOutputTypes['public']['Material']['id'];
+    nome: FieldOutputTypes['public']['Material']['nome'];
+    updatedAt: FieldOutputTypes['public']['Material']['updatedAt'];
+    massagens: public_MassagemMaterial[];
+    readonly [RelationKeys]?: 'massagens';
+  };
   export type public_TokenRevogado = {
     expiresAt: FieldOutputTypes['public']['TokenRevogado']['expiresAt'];
     jti: FieldOutputTypes['public']['TokenRevogado']['jti'];
@@ -302,6 +341,10 @@ export namespace Models {
 export declare const models: {
   public: {
     Agendamento: Models.public_Agendamento;
+    Massagem: Models.public_Massagem;
+    MassagemMaterial: Models.public_MassagemMaterial;
+    MassagistaMassagem: Models.public_MassagistaMassagem;
+    Material: Models.public_Material;
     TokenRevogado: Models.public_TokenRevogado;
     Usuario: Models.public_Usuario;
   };
@@ -399,6 +442,264 @@ type ContractBase = Omit<
                   };
                 },
               ];
+            };
+            readonly Massagem: {
+              columns: {
+                readonly ativo: {
+                  readonly dataType: 'pg/bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly descricao: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly duracaoMinutos: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                  readonly many: false;
+                };
+                readonly nome: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly valorCentavos: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'Massagem_ativo_idx';
+                  readonly columns: readonly ['ativo'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'Massagem_nome_key';
+                  readonly columns: readonly ['nome'];
+                  readonly unique: true;
+                },
+              ];
+              foreignKeys: readonly [];
+            };
+            readonly MassagemMaterial: {
+              columns: {
+                readonly massagemId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly materialId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly quantidade: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly unidade: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['massagemId', 'materialId'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'MassagemMaterial_materialId_idx';
+                  readonly columns: readonly ['materialId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'MassagemMaterial';
+                    readonly columns: readonly ['massagemId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Massagem';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'MassagemMaterial';
+                    readonly columns: readonly ['materialId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Material';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly MassagistaMassagem: {
+              columns: {
+                readonly massagemId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly usuarioId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['usuarioId', 'massagemId'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'MassagistaMassagem_massagemId_idx';
+                  readonly columns: readonly ['massagemId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'MassagistaMassagem';
+                    readonly columns: readonly ['usuarioId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Usuario';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'MassagistaMassagem';
+                    readonly columns: readonly ['massagemId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Massagem';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly Material: {
+              columns: {
+                readonly ativo: {
+                  readonly dataType: 'pg/bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/bool@1', true>;
+                  };
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly descricao: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                  readonly many: false;
+                };
+                readonly nome: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'Material_ativo_idx';
+                  readonly columns: readonly ['ativo'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'Material_nome_key';
+                  readonly columns: readonly ['nome'];
+                  readonly unique: true;
+                },
+              ];
+              foreignKeys: readonly [];
             };
             readonly TokenRevogado: {
               columns: {
@@ -509,6 +810,16 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Agendamento';
     };
+    readonly Massagem: { readonly namespace: 'public' & NamespaceId; readonly model: 'Massagem' };
+    readonly MassagemMaterial: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'MassagemMaterial';
+    };
+    readonly MassagistaMassagem: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'MassagistaMassagem';
+    };
+    readonly Material: { readonly namespace: 'public' & NamespaceId; readonly model: 'Material' };
     readonly TokenRevogado: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'TokenRevogado';
@@ -587,6 +898,251 @@ type ContractBase = Omit<
                 readonly status: { readonly column: 'status' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
                 readonly usuarioId: { readonly column: 'usuarioId' };
+              };
+            };
+          };
+          readonly Massagem: {
+            readonly fields: {
+              readonly ativo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly descricao: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly duracaoMinutos: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly nome: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly valorCentavos: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly massagistas: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MassagistaMassagem';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['massagemId'];
+                };
+              };
+              readonly materiais: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MassagemMaterial';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['massagemId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'Massagem';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly ativo: { readonly column: 'ativo' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly descricao: { readonly column: 'descricao' };
+                readonly duracaoMinutos: { readonly column: 'duracaoMinutos' };
+                readonly id: { readonly column: 'id' };
+                readonly nome: { readonly column: 'nome' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly valorCentavos: { readonly column: 'valorCentavos' };
+              };
+            };
+          };
+          readonly MassagemMaterial: {
+            readonly fields: {
+              readonly massagemId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly materialId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly quantidade: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly unidade: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly massagem: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Massagem';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['massagemId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly material: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Material';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['materialId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'MassagemMaterial';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly massagemId: { readonly column: 'massagemId' };
+                readonly materialId: { readonly column: 'materialId' };
+                readonly quantidade: { readonly column: 'quantidade' };
+                readonly unidade: { readonly column: 'unidade' };
+              };
+            };
+          };
+          readonly MassagistaMassagem: {
+            readonly fields: {
+              readonly massagemId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly usuarioId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly massagem: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Massagem';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['massagemId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly usuario: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['usuarioId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'MassagistaMassagem';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly massagemId: { readonly column: 'massagemId' };
+                readonly usuarioId: { readonly column: 'usuarioId' };
+              };
+            };
+          };
+          readonly Material: {
+            readonly fields: {
+              readonly ativo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly descricao: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly nome: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly massagens: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MassagemMaterial';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['materialId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'Material';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly ativo: { readonly column: 'ativo' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly descricao: { readonly column: 'descricao' };
+                readonly id: { readonly column: 'id' };
+                readonly nome: { readonly column: 'nome' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
               };
             };
           };
@@ -722,6 +1278,24 @@ type ContractBase = Omit<
           readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Agendamento';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'Massagem';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'Material';
             readonly field: 'updatedAt';
             readonly namespace: 'public';
           };
