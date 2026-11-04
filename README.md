@@ -1,6 +1,6 @@
-# sistema-massagem
+# Sistema de Agendamento de Massagem
 
-Projeto para agendamento de Massagem - Backend e Frontend
+Backend para gerenciamento de clínica de massagens: usuários, autenticação, catálogo de massagens, materiais e vínculos com massagistas.
 
 ---
 
@@ -10,11 +10,8 @@ Projeto para agendamento de Massagem - Backend e Frontend
 - [Configuração do Projeto](#configuração-do-projeto)
 - [Executando a Aplicação](#executando-a-aplicação)
 - [Testes](#testes)
-- [Deploy](#deploy)
-- [Observabilidade](#observabilidade)
-- [Recursos](#recursos)
-- [Suporte](#suporte)
-- [Licença](#licença)
+- [Documentação da API (Swagger)](#documentação-da-api-swagger)
+- [Recursos da API](#recursos-da-api)
 
 ---
 
@@ -26,7 +23,7 @@ Projeto para agendamento de Massagem - Backend e Frontend
 docker compose up -d
 ```
 
-### Testar a conexão com o banco de dados
+### Testar a conexão
 
 ```bash
 # Verificar se o container está rodando
@@ -35,13 +32,13 @@ docker ps
 # Testar conexão via psql (dentro do container)
 docker exec -it sistema-massagem-postgres psql -U postgres -d sistema_massagem -c "SELECT version();"
 
-# Testar conexão via psql (do host, se tiver psql instalado)
+# Testar conexão via psql (do host)
 psql -h localhost -U postgres -d sistema_massagem -c "SELECT version();"
 
-# Verificar logs do PostgreSQL
+# Verificar logs
 docker logs sistema-massagem-postgres
 
-# Parar o banco de dados
+# Parar o banco
 docker compose down
 
 # Parar e remover volumes (apaga os dados)
@@ -66,14 +63,18 @@ docker compose down -v
 $ npm install
 ```
 
-## Usuários e perfis
+### Variáveis de ambiente
 
-- `POST /api/usuarios/register` cadastra um cliente com o perfil `CLIENTE`.
-- `POST /api/auth/login` autentica um usuário.
-- `POST /api/auth/logout` encerra a sessão e revoga o token JWT atual; envie o token no cabeçalho `Authorization: Bearer <token>`.
-- `PATCH /api/usuarios/:id/perfil` altera o perfil e exige autenticação de um usuário `ADMIN`.
+Copie `.env.example` para `.env` e ajuste se necessário:
 
-Os perfis disponíveis são `CLIENTE` (padrão), `ADMIN` (administração e atribuição de perfis), `ADMINISTRATIVO` (agendamentos, pagamentos e recebimentos) e `MASSAGISTA` (atendimentos e materiais da clínica). Cada usuário possui um perfil, alterável pelo administrador. O cadastro público não aceita perfil no corpo da requisição. Para definir o primeiro administrador, promova uma conta diretamente no banco de dados, por exemplo: `UPDATE "Usuario" SET "perfil" = 'ADMIN' WHERE "email" = 'email-da-conta';`. Após o logout, o token revogado não pode mais ser usado nas rotas protegidas; a sessão só pode ser retomada após novo login.
+```bash
+cp .env.example .env
+```
+
+Principais variáveis:
+- `DATABASE_URL` — string de conexão PostgreSQL
+- `JWT_SECRET` — segredo para assinar tokens JWT
+- `PORT` — porta do servidor (padrão: 3000)
 
 ---
 
@@ -83,12 +84,15 @@ Os perfis disponíveis são `CLIENTE` (padrão), `ADMIN` (administração e atri
 # development
 $ npm run start
 
-# watch mode
+# watch mode (recarrega ao salvar)
 $ npm run start:dev
 
-# production mode
+# production build
+$ npm run build
 $ npm run start:prod
 ```
+
+A aplicação sobe em `http://localhost:3000/api` (prefixo global `/api`).
 
 ---
 
@@ -107,80 +111,291 @@ $ npm run test:cov
 
 ---
 
-## 📦 Deploy
+## 📖 Documentação da API (Swagger)
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+A documentação interativa está disponível em:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+```
+http://localhost:3000/docs
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Autenticação no Swagger
+
+1. Faça login em `POST /api/auth/login` para obter o token JWT
+2. Clique no botão **Authorize** (🔒) no topo da página
+3. Cole o token no campo `Bearer <token>`
+4. As rotas protegidas agora funcionarão
+
+### Tags organizadas
+
+| Tag | Descrição |
+|-----|-----------|
+| **Auth** | Login, logout, renovação de token |
+| **Usuários** | Cadastro, listagem, alteração de perfil |
+| **Massagens** | Catálogo de massagens, materiais, vínculos com massagistas |
+| **Materiais** | Catálogo de materiais reutilizáveis |
+| **Health** | Verificação de saúde da aplicação |
 
 ---
 
-## 🔍 Observabilidade
+## 📚 Recursos da API
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+### Prefixo global
+Todas as rotas estão sob `/api`.
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
+### Autenticação (`/api/auth`)
 
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `POST` | `/login` | Autentica usuário, retorna JWT | Público |
+| `POST` | `/logout` | Revoga token atual | Autenticado |
 
-This project is already instrumented. To connect it, run this and approve the code it prints at [observe.nestjs.com/link](https://observe.nestjs.com/link) - signing up for free if you have no account:
+### Usuários (`/api/usuarios`)
 
-```bash
-$ npx @nestjs/observe link
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `POST` | `/register` | Cadastra cliente (perfil `CLIENTE`) | Público |
+| `GET` | `/` | Lista usuários | `ADMIN` |
+| `GET` | `/:id` | Busca usuário por ID | `ADMIN` |
+| `PATCH` | `/:id/perfil` | Altera perfil do usuário | `ADMIN` |
+
+**Perfis disponíveis:** `CLIENTE` (padrão), `ADMIN`, `ADMINISTRATIVO`, `MASSAGISTA`
+
+> Para criar o primeiro `ADMIN`, atualize direto no banco:
+> ```sql
+> UPDATE "Usuario" SET "perfil" = 'ADMIN' WHERE "email" = 'seu@email.com';
+> ```
+
+### Massagens (`/api/massagens`)
+
+Catálogo de tipos de massagem oferecidos pela clínica.
+
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `POST` | `/` | Cadastrar massagem | `ADMIN` |
+| `GET` | `/` | Listar massagens **ativas** | Autenticado |
+| `GET` | `/:id` | Detalhes da massagem | Autenticado |
+| `PATCH` | `/:id` | Atualizar dados da massagem | `ADMIN` |
+| `PATCH` | `/:id/ativo` | Arquivar/reativar massagem | `ADMIN` |
+| `PUT` | `/:id/materiais` | Substituir ficha de materiais | `ADMIN` |
+| `PUT` | `/:id/massagistas/:usuarioId` | Vincular massagista | `ADMIN` |
+| `DELETE` | `/:id/massagistas/:usuarioId` | Desvincular massagista | `ADMIN` |
+
+#### DTO de criação (`POST /api/massagens`)
+```json
+{
+  "nome": "Massagem relaxante",
+  "descricao": "Técnica para relaxamento muscular.",
+  "duracaoMinutos": 60,
+  "valorCentavos": 15000
+}
+```
+- `valorCentavos`: valor em centavos (ex: 15000 = R$ 150,00)
+- `nome` único, 2–100 caracteres
+- `duracaoMinutos` > 0
+- `valorCentavos` ≥ 0
+
+#### Ficha de materiais (`PUT /api/massagens/:id/materiais`)
+```json
+{
+  "materiais": [
+    { "materialId": 1, "quantidade": 10, "unidade": "ml" },
+    { "materialId": 2, "quantidade": 1, "unidade": "unidade" }
+  ]
+}
+```
+- Substitui a ficha completa (lista vazia = remove todos)
+- Todos os materiais devem existir e estar ativos
+- IDs não podem se repetir na mesma lista
+- Operação atômica (transação)
+
+#### Vínculo massagista (`PUT /api/massagens/:id/massagistas/:usuarioId`)
+- Usuário deve ter perfil `MASSAGISTA`
+- Massagem deve estar ativa
+- Impede vínculos duplicados
+
+---
+
+### Materiais (`/api/materiais`)
+
+Catálogo de materiais reutilizáveis (óleos, lençóis, pedras, etc.).
+
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `POST` | `/` | Cadastrar material | `ADMIN` |
+| `PATCH` | `/:id/ativo` | Arquivar/reativar material | `ADMIN` |
+
+#### DTO de criação (`POST /api/materiais`)
+```json
+{
+  "nome": "Óleo de amêndoas",
+  "descricao": "Óleo vegetal para massagem."
+}
+```
+- `nome` único, 2–100 caracteres
+- `descricao` opcional, máx. 1000 caracteres
+
+> Materiais arquivados (`ativo: false`) não podem ser adicionados a novas fichas.
+
+---
+
+### Health Check (`/api/health`)
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| `GET` | `/` | Status da aplicação |
+
+---
+
+## 🗄️ Modelo de Dados (Prisma)
+
+Principais modelos:
+
+```prisma
+model Usuario {
+  id                Int                 @id @default(autoincrement())
+  email             String              @unique
+  nome              String
+  senha             String
+  perfil            String              @default("CLIENTE")
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  agendamentos      Agendamento[]
+  massagistaMassagens MassagistaMassagem[]
+}
+
+model Massagem {
+  id              Int                 @id @default(autoincrement())
+  nome            String              @unique
+  descricao       String
+  duracaoMinutos  Int
+  valorCentavos   Int
+  ativo           Boolean             @default(true)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  materiais       MassagemMaterial[]
+  massagistas     MassagistaMassagem[]
+  @@index([ativo])
+}
+
+model Material {
+  id          Int                 @id @default(autoincrement())
+  nome        String              @unique
+  descricao   String?
+  ativo       Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  massagens   MassagemMaterial[]
+  @@index([ativo])
+}
+
+model MassagemMaterial {
+  massagemId  Int
+  materialId  Int
+  quantidade  Int
+  unidade     String
+  massagem    Massagem @relation(fields: [massagemId], references: [id], onDelete: Cascade)
+  material    Material @relation(fields: [materialId], references: [id], onDelete: Restrict)
+  @@id([massagemId, materialId])
+  @@index([materialId])
+}
+
+model MassagistaMassagem {
+  usuarioId   Int
+  massagemId  Int
+  usuario     Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  massagem    Massagem @relation(fields: [massagemId], references: [id], onDelete: Cascade)
+  @@id([usuarioId, massagemId])
+  @@index([massagemId])
+}
 ```
 
-It writes the app key and secret into `.env` and makes every `nest start` script (`start`, `start:dev`, `start:debug`) load it. In production, set `OBSERVE_APP_KEY` and `OBSERVE_APP_SECRET` in the environment instead.
+### Regras de negócio implementadas
 
-Or do it by hand: create an application and an API key at [observe.nestjs.com](https://observe.nestjs.com), and set the pair as `OBSERVE_APP_KEY` and `OBSERVE_APP_SECRET` in the environment the app runs in.
-
-The free plan needs no payment details and covers 300,000 events a month. You can also browse the [live demo](https://www.observe-demo.nestjs.com/dashboard) first - the whole dashboard over a busy service's data, with nothing to install.
-
----
-
-## 📚 Recursos
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observe](https://observe.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+- **Arquivamento em vez de exclusão**: massagens e materiais usam `ativo: false` para manter histórico de agendamentos
+- **Valores em centavos**: evita erros de ponto flutuante (R$ 150,00 = 15000)
+- **Vínculo muitos-para-muitos**: massagista ↔ massagem via `MassagistaMassagem`
+- **Ficha de materiais**: quantidade + unidade por massagem (ex: 10 ml, 1 unidade)
+- **Apenas ADMIN gerencia catálogo**: criação, edição, arquivamento, vínculos
+- **Massagista só atende massagens vinculadas**: verificado no servidor
 
 ---
 
-## 💬 Suporte
+## 🔧 Comandos Úteis (Prisma)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+# Gerar contrato TypeScript após alterar schema.prisma
+$ npm run prisma:emit
+
+# Planejar migration
+$ npx prisma migration plan --name nome-da-migration
+
+# Ver SQL que será executado
+$ npx prisma db migrate --show
+
+# Aplicar migration
+$ npx prisma db migrate --advance-ref db
+
+# Status das migrations
+$ npx prisma migration status
+
+# Abrir Prisma Studio
+$ npx prisma studio
+```
+
+> Migrations ficam em `migrations/app/` (não em `prisma/migrations/`).
 
 ---
 
-## 📞 Stay in touch
+## 📁 Estrutura do Projeto
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```
+src/
+├── app.module.ts
+├── main.ts
+├── prisma/
+│   └── db.ts              # Cliente Prisma (ORM Postgres)
+├── auth/                  # Autenticação JWT
+│   ├── auth.module.ts
+│   ├── auth.controller.ts
+│   ├── auth.service.ts
+│   ├── dto/login.dto.ts
+│   ├── guards/jwt-auth.guard.ts
+│   └── strategies/jwt.strategy.ts
+├── usuarios/              # Usuários e perfis
+│   ├── usuarios.module.ts
+│   ├── usuarios.controller.ts
+│   ├── usuarios.service.ts
+│   ├── dto/register.dto.ts
+│   ├── dto/update-perfil.dto.ts
+│   ├── perfil.enum.ts
+│   └── guards/admin.guard.ts
+├── massagens/             # Catálogo de massagens e materiais
+│   ├── massagens.module.ts
+│   ├── massagens.controller.ts
+│   ├── massagens.service.ts
+│   ├── materiais.controller.ts
+│   └── dto/
+│       ├── create-massagem.dto.ts
+│       ├── update-massagem.dto.ts
+│       ├── create-material.dto.ts
+│       ├── update-ativo.dto.ts
+│       └── update-materiais-massagem.dto.ts
+└── health/                # Health check
+    ├── health.module.ts
+    ├── health.controller.ts
+    └── health.service.ts
+```
 
 ---
 
-## 📄 Licença
+## ✅ Critérios de Qualidade
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+| Check | Comando | Status |
+|-------|---------|--------|
+| Build | `npm run build` | ✅ Passa |
+| Lint | `npm run lint` | ✅ Passa (1 warning) |
+| Testes unitários | `npm run test` | ⚠️ Sem testes para massagens |
+| Testes e2e | `npm run test:e2e` | ✅ Passa |
+
+> **Pendente**: Testes unitários para o módulo `massagens` (service + controllers).
