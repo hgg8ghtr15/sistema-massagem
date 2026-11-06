@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsString, MinLength, MaxLength, IsInt, Min } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { IsString, MinLength, MaxLength, IsInt, Min, IsOptional } from "class-validator";
 
 export class CreateMassagemDto {
     @ApiProperty({ example: 'Massagem relaxante', maxLength: 100 })
@@ -26,4 +26,10 @@ export class CreateMassagemDto {
     @IsInt()
     @Min(0)
     valorCentavos: number;
+
+    @ApiPropertyOptional({ example: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' })
+    @IsOptional()
+    @IsString()
+    @MaxLength(500)
+    youtubeUrl?: string;
 }

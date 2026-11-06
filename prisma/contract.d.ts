@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'f650dd73850c53be05baf09ced1c23b27d0776e97a7bf74b4e92776d8ff009c5'>;
+  StorageHashBase<'797c601d95830c46b8dbab257e96b484fa6fd7ff81df2122677518bbd3343a17'>;
 export type ExecutionHash =
   ExecutionHashBase<'6fdf9b44786d6ac8722f89de33ca6101f2aa8a20f3459e7c8b22f4650dd748c2'>;
 export type ProfileHash =
@@ -290,6 +290,7 @@ export namespace Models {
     nome: FieldOutputTypes['public']['Massagem']['nome'];
     updatedAt: FieldOutputTypes['public']['Massagem']['updatedAt'];
     valorCentavos: FieldOutputTypes['public']['Massagem']['valorCentavos'];
+    youtubeUrl: FieldOutputTypes['public']['Massagem']['youtubeUrl'];
     massagistas: public_MassagistaMassagem[];
     materiais: public_MassagemMaterial[];
     readonly [RelationKeys]?: 'massagistas' | 'materiais';
@@ -334,7 +335,8 @@ export namespace Models {
     senha: FieldOutputTypes['public']['Usuario']['senha'];
     updatedAt: FieldOutputTypes['public']['Usuario']['updatedAt'];
     agendamentos: public_Agendamento[];
-    readonly [RelationKeys]?: 'agendamentos';
+    massagistas: public_MassagistaMassagem[];
+    readonly [RelationKeys]?: 'agendamentos' | 'massagistas';
   };
 }
 
@@ -502,6 +504,12 @@ type ContractBase = Omit<
                   readonly dataType: 'pg/int4';
                   readonly codecId: 'pg/int4@1';
                   readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly youtubeUrl: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
                   readonly many: false;
                 };
               };
@@ -943,6 +951,10 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
               };
+              readonly youtubeUrl: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
             };
             readonly relations: {
               readonly massagistas: {
@@ -980,6 +992,7 @@ type ContractBase = Omit<
                 readonly nome: { readonly column: 'nome' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
                 readonly valorCentavos: { readonly column: 'valorCentavos' };
+                readonly youtubeUrl: { readonly column: 'youtubeUrl' };
               };
             };
           };
@@ -1215,6 +1228,17 @@ type ContractBase = Omit<
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
                   readonly model: 'Agendamento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['usuarioId'];
+                };
+              };
+              readonly massagistas: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MassagistaMassagem';
                 };
                 readonly cardinality: '1:N';
                 readonly on: {

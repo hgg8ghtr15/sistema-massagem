@@ -207,6 +207,13 @@
                   "codecId": "pg/int4@1",
                   "kind": "scalar"
                 }
+              },
+              "youtubeUrl": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
               }
             },
             "relations": {
@@ -266,6 +273,9 @@
                 },
                 "valorCentavos": {
                   "column": "valorCentavos"
+                },
+                "youtubeUrl": {
+                  "column": "youtubeUrl"
                 }
               },
               "namespaceId": "public",
@@ -620,6 +630,21 @@
                   "model": "Agendamento",
                   "namespace": "public"
                 }
+              },
+              "massagistas": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "usuarioId"
+                  ]
+                },
+                "to": {
+                  "model": "MassagistaMassagem",
+                  "namespace": "public"
+                }
               }
             },
             "storage": {
@@ -805,6 +830,11 @@
                   "codecId": "pg/int4@1",
                   "dataType": "pg/int4",
                   "nullable": false
+                },
+                "youtubeUrl": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
                 }
               },
               "foreignKeys": [],
@@ -1170,7 +1200,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "f650dd73850c53be05baf09ced1c23b27d0776e97a7bf74b4e92776d8ff009c5"
+    "storageHash": "797c601d95830c46b8dbab257e96b484fa6fd7ff81df2122677518bbd3343a17"
   },
   "execution": {
     "executionHash": "6fdf9b44786d6ac8722f89de33ca6101f2aa8a20f3459e7c8b22f4650dd748c2",

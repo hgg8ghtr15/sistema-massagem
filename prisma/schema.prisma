@@ -17,6 +17,7 @@ model Usuario {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   agendamentos Agendamento[]
+  massagistas  MassagistaMassagem[]
 }
 
 model Agendamento {
@@ -43,6 +44,7 @@ model Massagem {
   descricao       String
   duracaoMinutos  Int
   valorCentavos   Int
+  youtubeUrl      String?
   ativo           Boolean             @default(true)
   createdAt       DateTime            @default(now())
   updatedAt       DateTime            @updatedAt

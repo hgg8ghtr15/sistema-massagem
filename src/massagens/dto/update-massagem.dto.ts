@@ -34,4 +34,10 @@ export class UpdateMassagemDto {
     @IsInt()
     @Min(0)
     valorCentavos?: number;
+
+    @ApiPropertyOptional({ example: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' })
+    @IsOptional()
+    @IsString()
+    @MaxLength(500)
+    youtubeUrl?: string | null;
 }

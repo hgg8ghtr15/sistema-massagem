@@ -154,6 +154,42 @@ describe('MassagensService', () => {
     });
   });
 
+  describe('atualizarMaterial', () => {
+    it('deve atualizar o nome e limpar a descrição do material', async () => {
+      const sufixo = Date.now();
+      const criado = await service.criarMaterial({
+        nome: `Material editável ${sufixo}`,
+        descricao: 'Descrição inicial',
+      } as any);
+
+      const atualizado = await service.atualizarMaterial(criado.id, {
+        nome: `Material atualizado ${sufixo}`,
+        descricao: '',
+      });
+
+      expect(atualizado.nome).toBe(`Material atualizado ${sufixo}`);
+      expect(atualizado.descricao).toBeNull();
+    });
+
+    it('deve lançar NotFoundException para material inexistente', async () => {
+      await expect(service.atualizarMaterial(999999, { nome: 'Material válido' }))
+        .rejects.toThrow('Material não encontrado');
+    });
+  });
+
+  describe('listarMateriais', () => {
+    it('deve retornar o catálogo de materiais', async () => {
+      const result = await service.listarMateriais();
+
+      expect(Array.isArray(result)).toBe(true);
+      result.forEach((material) => {
+        expect(material).toHaveProperty('id');
+        expect(material).toHaveProperty('nome');
+        expect(material).toHaveProperty('ativo');
+      });
+    });
+  });
+
   describe('substituirMateriais', () => {
     it('deve lançar BadRequestException para massagem inativa', async () => {
       await expect(

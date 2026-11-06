@@ -187,13 +187,15 @@ Catálogo de tipos de massagem oferecidos pela clínica.
   "nome": "Massagem relaxante",
   "descricao": "Técnica para relaxamento muscular.",
   "duracaoMinutos": 60,
-  "valorCentavos": 15000
+  "valorCentavos": 15000,
+  "youtubeUrl": "https://www.youtube.com/watch?v=aqz-KE-bpKQ"
 }
 ```
 - `valorCentavos`: valor em centavos (ex: 15000 = R$ 150,00)
 - `nome` único, 2–100 caracteres
 - `duracaoMinutos` > 0
 - `valorCentavos` ≥ 0
+- `youtubeUrl` (opcional): link de vídeo do YouTube; aparece como miniatura no catálogo e como vídeo incorporado nos detalhes. Na edição, envie `null` ou uma string vazia para remover o vídeo.
 
 #### Ficha de materiais (`PUT /api/massagens/:id/materiais`)
 ```json

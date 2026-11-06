@@ -8,8 +8,10 @@ import { db } from '../prisma/db';
 import { Perfil } from '../usuarios/perfil.enum';
 import { CreateMaterialDto } from './dto/create-material.dto';
 import { CreateMassagemDto } from './dto/create-massagem.dto';
+import { UpdateMaterialDto } from './dto/update-material.dto';
 import { UpdateMassagemDto } from './dto/update-massagem.dto';
 import { UpdateMateriaisMassagemDto } from './dto/update-materiais-massagem.dto';
+import { normalizarYoutubeUrl } from './youtube-url';
 
 @Injectable()
 export class MassagensService {
@@ -26,6 +28,7 @@ export class MassagensService {
             descricao: dto.descricao.trim(),
             duracaoMinutos: dto.duracaoMinutos,
             valorCentavos: dto.valorCentavos,
+            youtubeUrl: normalizarYoutubeUrl(dto.youtubeUrl),
             ativo: true,
         });
     }
@@ -83,6 +86,9 @@ export class MassagensService {
             ...dto,
             ...(nome ? { nome } : {}),
             ...(dto.descricao ? { descricao: dto.descricao.trim() } : {}),
+            ...(dto.youtubeUrl !== undefined
+                ? { youtubeUrl: normalizarYoutubeUrl(dto.youtubeUrl) }
+                : {}),
         });
     }
 
@@ -107,6 +113,39 @@ export class MassagensService {
             nome,
             descricao: dto.descricao?.trim(),
             ativo: true,
+        });
+    }
+
+    async listarMateriais() {
+        return db.orm.public.Material.all();
+    }
+
+    async atualizarMaterial(id: number, dto: UpdateMaterialDto) {
+        const material = await db.orm.public.Material.first({ id });
+        if (!material) {
+            throw new NotFoundException('Material não encontrado');
+        }
+
+        if (Object.keys(dto).length === 0) {
+            throw new BadRequestException('Informe ao menos um campo para atualizar');
+        }
+
+        const nome = dto.nome?.trim();
+        if (dto.nome !== undefined && (!nome || nome.length < 2)) {
+            throw new BadRequestException('O nome do material deve ter pelo menos 2 caracteres');
+        }
+        if (nome && nome !== material.nome) {
+            const existente = await db.orm.public.Material.where({ nome }).first();
+            if (existente && existente.id !== id) {
+                throw new ConflictException('Já existe um material com esse nome');
+            }
+        }
+
+        return db.orm.public.Material.where({ id }).update({
+            ...(nome ? { nome } : {}),
+            ...(dto.descricao !== undefined
+                ? { descricao: dto.descricao.trim() || null }
+                : {}),
         });
     }
 
