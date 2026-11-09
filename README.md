@@ -156,14 +156,14 @@ Todas as rotas estão sob `/api`.
 |--------|------|-----------|--------|
 | `POST` | `/register` | Cadastra cliente (perfil `CLIENTE`) | Público |
 | `GET` | `/` | Lista usuários | `ADMIN` |
-| `GET` | `/:id` | Busca usuário por ID | `ADMIN` |
-| `PATCH` | `/:id/perfil` | Altera perfil do usuário | `ADMIN` |
+| `PATCH` | `/:id/perfil` | Adiciona um perfil ao usuário | `ADMIN` |
+| `PATCH` | `/:id/perfis` | Substitui todos os perfis do usuário | `ADMIN` |
 
-**Perfis disponíveis:** `CLIENTE` (padrão), `ADMIN`, `ADMINISTRATIVO`, `MASSAGISTA`
+**Perfis disponíveis:** `CLIENTE` (padrão), `ADMIN`, `ADMINISTRATIVO`, `MASSAGISTA`. Um usuário pode ter mais de um perfil. Cadastros públicos sempre começam como cliente; somente administradores autenticados podem listar usuários ou alterar seus perfis.
 
 > Para criar o primeiro `ADMIN`, atualize direto no banco:
 > ```sql
-> UPDATE "Usuario" SET "perfil" = 'ADMIN' WHERE "email" = 'seu@email.com';
+> UPDATE "Usuario" SET "perfis" = ARRAY['ADMIN'] WHERE "email" = 'seu@email.com';
 > ```
 
 ### Massagens (`/api/massagens`)

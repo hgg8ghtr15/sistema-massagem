@@ -39,7 +39,7 @@ export class MassagensService {
             .include('materiais', (itens) => itens.include('material'))
             .include('massagistas', (vinculos) =>
                 vinculos.include('usuario', (usuario) =>
-                    usuario.select('id', 'nome', 'email', 'perfil'),
+                    usuario.select('id', 'nome', 'email', 'perfis'),
                 ),
             )
             .all();
@@ -51,7 +51,7 @@ export class MassagensService {
             .include('materiais', (itens) => itens.include('material'))
             .include('massagistas', (vinculos) =>
                 vinculos.include('usuario', (usuario) =>
-                    usuario.select('id', 'nome', 'email', 'perfil'),
+                    usuario.select('id', 'nome', 'email', 'perfis'),
                 ),
             )
             .first();
@@ -211,7 +211,7 @@ export class MassagensService {
         if (!usuario) {
             throw new NotFoundException('Usuário não encontrado');
         }
-        if (usuario.perfil !== Perfil.MASSAGISTA) {
+        if (!usuario.perfis?.includes(Perfil.MASSAGISTA)) {
             throw new BadRequestException('O usuário informado não é massagista');
         }
 

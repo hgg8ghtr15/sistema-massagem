@@ -590,8 +590,11 @@
                   "kind": "scalar"
                 }
               },
-              "perfil": {
-                "nullable": false,
+              "perfis": {
+                "many": {
+                  "elementNullable": true
+                },
+                "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
                   "kind": "scalar"
@@ -661,8 +664,8 @@
                 "nome": {
                   "column": "nome"
                 },
-                "perfil": {
-                  "column": "perfil"
+                "perfis": {
+                  "column": "perfis"
                 },
                 "senha": {
                   "column": "senha"
@@ -1154,14 +1157,19 @@
                   "dataType": "pg/text",
                   "nullable": false
                 },
-                "perfil": {
+                "perfis": {
                   "codecId": "pg/text@1",
                   "dataType": "pg/text",
                   "default": {
                     "kind": "literal",
-                    "value": "CLIENTE"
+                    "value": [
+                      "CLIENTE"
+                    ]
                   },
-                  "nullable": false
+                  "many": {
+                    "elementNullable": true
+                  },
+                  "nullable": true
                 },
                 "senha": {
                   "codecId": "pg/text@1",
@@ -1200,7 +1208,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "797c601d95830c46b8dbab257e96b484fa6fd7ff81df2122677518bbd3343a17"
+    "storageHash": "ca0a5e44afd8a4100bb52775268785feb9d530a07195d6198c26c9fd3c87b44d"
   },
   "execution": {
     "executionHash": "6fdf9b44786d6ac8722f89de33ca6101f2aa8a20f3459e7c8b22f4650dd748c2",

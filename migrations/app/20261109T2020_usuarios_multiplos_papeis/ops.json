@@ -1,0 +1,264 @@
+[
+  {
+    "id": "renameColumn.Usuario.perfil",
+    "label": "Rename column \"Usuario\".\"perfil\" to \"perfis\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "perfis",
+        "table": "Usuario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"perfil\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Usuario",
+          "perfil"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"perfil\" on \"Usuario\""
+        }
+      },
+      {
+        "description": "ensure column \"perfis\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Usuario",
+          "perfis"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"perfis\" on \"Usuario\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "rename column \"perfil\" to \"perfis\"",
+        "sql": "ALTER TABLE \"public\".\"Usuario\" RENAME COLUMN \"perfil\" TO \"perfis\""
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"perfis\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Usuario",
+          "perfis"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"perfis\" on \"Usuario\""
+        }
+      },
+      {
+        "description": "verify column \"perfil\" no longer exists",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Usuario",
+          "perfil"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"perfil\" on \"Usuario\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "dropDefault.Usuario.perfis",
+    "label": "Drop default on \"Usuario\".\"perfis\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "perfis",
+        "table": "Usuario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"perfis\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Usuario",
+          "perfis"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"perfis\" on \"Usuario\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop default on \"perfis\"",
+        "sql": "ALTER TABLE \"public\".\"Usuario\" ALTER COLUMN \"perfis\" DROP DEFAULT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"perfis\" has no default",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"column_default\" IS NULL)) AS \"result\"",
+        "params": [
+          "public",
+          "Usuario",
+          "perfis"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterType.Usuario.perfis",
+    "label": "Alter type of \"Usuario\".\"perfis\" to text[]",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "perfis",
+        "table": "Usuario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"perfis\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Usuario",
+          "perfis"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"perfis\" on \"Usuario\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "alter type of \"perfis\" to text[]",
+        "sql": "ALTER TABLE \"public\".\"Usuario\" ALTER COLUMN \"perfis\" TYPE text[] USING ARRAY[\"perfis\"]::text[]",
+        "meta": {
+          "convertedColumn": {
+            "table": "Usuario",
+            "column": "perfis",
+            "by": "conversion"
+          }
+        }
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"perfis\" has type \"text[]\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Usuario",
+          "perfis",
+          "text[]"
+        ]
+      }
+    ],
+    "meta": {
+      "warning": "TABLE_REWRITE"
+    }
+  },
+  {
+    "id": "alterNullability.dropNotNull.Usuario.perfis",
+    "label": "Drop NOT NULL on \"Usuario\".\"perfis\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "perfis",
+        "table": "Usuario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"perfis\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Usuario",
+          "perfis"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"perfis\" on \"Usuario\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "drop NOT NULL on \"perfis\"",
+        "sql": "ALTER TABLE \"public\".\"Usuario\" ALTER COLUMN \"perfis\" DROP NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"perfis\" is nullable",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "Usuario",
+          "perfis",
+          "YES"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "setDefault.Usuario.perfis",
+    "label": "Set default on \"Usuario\".\"perfis\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "perfis",
+        "table": "Usuario"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"perfis\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Usuario",
+          "perfis"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"perfis\" on \"Usuario\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "set default on \"perfis\"",
+        "sql": "ALTER TABLE \"public\".\"Usuario\" ALTER COLUMN \"perfis\" SET DEFAULT ARRAY['CLIENTE']::text[]"
+      }
+    ],
+    "postcheck": []
+  }
+]

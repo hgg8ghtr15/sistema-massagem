@@ -5,24 +5,28 @@ import { Perfil } from '../perfil.enum';
 describe('AdminGuard', () => {
   const guard = new AdminGuard();
 
-  function createContext(perfil: string): ExecutionContext {
+  function createContext(perfis: string[]): ExecutionContext {
     return {
       switchToHttp: () => ({
-        getRequest: () => ({ user: { perfil } }),
+        getRequest: () => ({ user: { perfis } }),
       }),
     } as ExecutionContext;
   }
 
   it('allows administrators', () => {
-    expect(guard.canActivate(createContext(Perfil.ADMIN))).toBe(true);
+    expect(guard.canActivate(createContext([Perfil.ADMIN, Perfil.MASSAGISTA]))).toBe(true);
   });
 
   it.each([Perfil.CLIENTE, Perfil.ADMINISTRATIVO, Perfil.MASSAGISTA])(
-    'rejects the %s profile',
+    'rejects users with only the %s profile',
     (perfil) => {
-      expect(() => guard.canActivate(createContext(perfil))).toThrow(
+      expect(() => guard.canActivate(createContext([perfil]))).toThrow(
         ForbiddenException,
       );
     },
   );
+
+  it('rejects users without profiles', () => {
+    expect(() => guard.canActivate(createContext([]))).toThrow(ForbiddenException);
+  });
 });

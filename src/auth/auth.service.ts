@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { randomUUID } from 'node:crypto';
 import * as bcrypt from 'bcrypt';
 import { db } from '../prisma/db';
+import { Perfil } from '../usuarios/perfil.enum';
 
 @Injectable()
 export class AuthService {
@@ -33,7 +34,8 @@ export class AuthService {
         id: user.id,
         email: user.email,
         nome: user.nome,
-        perfil: user.perfil,
+        perfil: user.perfis?.[0] ?? Perfil.CLIENTE,
+        perfis: user.perfis ?? [Perfil.CLIENTE],
         createdAt: user.createdAt,
       },
       token,
@@ -61,7 +63,8 @@ export class AuthService {
       id: user.id,
       email: user.email,
       nome: user.nome,
-      perfil: user.perfil,
+      perfil: user.perfis?.[0] ?? Perfil.CLIENTE,
+      perfis: user.perfis ?? [Perfil.CLIENTE],
       createdAt: user.createdAt,
     };
   }

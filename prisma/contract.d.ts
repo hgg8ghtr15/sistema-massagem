@@ -23,7 +23,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'797c601d95830c46b8dbab257e96b484fa6fd7ff81df2122677518bbd3343a17'>;
+  StorageHashBase<'ca0a5e44afd8a4100bb52775268785feb9d530a07195d6198c26c9fd3c87b44d'>;
 export type ExecutionHash =
   ExecutionHashBase<'6fdf9b44786d6ac8722f89de33ca6101f2aa8a20f3459e7c8b22f4650dd748c2'>;
 export type ProfileHash =
@@ -331,7 +331,7 @@ export namespace Models {
     email: FieldOutputTypes['public']['Usuario']['email'];
     id: FieldOutputTypes['public']['Usuario']['id'];
     nome: FieldOutputTypes['public']['Usuario']['nome'];
-    perfil: FieldOutputTypes['public']['Usuario']['perfil'];
+    perfis: FieldOutputTypes['public']['Usuario']['perfis'];
     senha: FieldOutputTypes['public']['Usuario']['senha'];
     updatedAt: FieldOutputTypes['public']['Usuario']['updatedAt'];
     agendamentos: public_Agendamento[];
@@ -768,15 +768,15 @@ type ContractBase = Omit<
                   readonly nullable: false;
                   readonly many: false;
                 };
-                readonly perfil: {
+                readonly perfis: {
                   readonly dataType: 'pg/text';
                   readonly codecId: 'pg/text@1';
-                  readonly nullable: false;
+                  readonly nullable: true;
                   readonly default: {
                     readonly kind: 'literal';
-                    readonly value: DefaultLiteralValue<'pg/text@1', 'CLIENTE'>;
+                    readonly value: DefaultLiteralValue<'pg/text@1', readonly ['CLIENTE']>;
                   };
-                  readonly many: false;
+                  readonly many: { readonly elementNullable: true };
                 };
                 readonly senha: {
                   readonly dataType: 'pg/text';
@@ -1206,9 +1206,10 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
               };
-              readonly perfil: {
-                readonly nullable: false;
+              readonly perfis: {
+                readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+                readonly many: { readonly elementNullable: true };
               };
               readonly senha: {
                 readonly nullable: false;
@@ -1255,7 +1256,7 @@ type ContractBase = Omit<
                 readonly email: { readonly column: 'email' };
                 readonly id: { readonly column: 'id' };
                 readonly nome: { readonly column: 'nome' };
-                readonly perfil: { readonly column: 'perfil' };
+                readonly perfis: { readonly column: 'perfis' };
                 readonly senha: { readonly column: 'senha' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
               };

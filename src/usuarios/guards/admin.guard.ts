@@ -11,9 +11,9 @@ export class AdminGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
     const request = context
       .switchToHttp()
-      .getRequest<{ user?: { perfil?: string } }>();
+      .getRequest<{ user?: { perfis?: string[] } }>();
 
-    if (request.user?.perfil !== Perfil.ADMIN) {
+    if (!request.user?.perfis?.includes(Perfil.ADMIN)) {
       throw new ForbiddenException('Apenas administradores podem alterar perfis');
     }
 
