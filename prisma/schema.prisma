@@ -16,19 +16,42 @@ model Usuario {
   perfis       String[]      @default(["CLIENTE"])
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  agendamentos Agendamento[]
+  agendamentos Agendamento[] @relation("AgendamentoCliente")
+  atendimentos Agendamento[] @relation("AgendamentoMassagista")
+  confirmacoes Agendamento[] @relation("AgendamentoConfirmadoPor")
   massagistas  MassagistaMassagem[]
+  horariosTrabalho HorarioTrabalho[]
+  bloqueios BloqueioMassagista[]
+  solicitacoesRespondidas SolicitacaoReagendamento[] @relation("SolicitacaoRespondidaPor")
+  historicosAgendamento AgendamentoHistorico[] @relation("HistoricoAutor")
+  notificacoes Notificacao[]
 }
 
 model Agendamento {
-  id          Int      @id @default(autoincrement())
-  dataHora    DateTime
-  status      String   @default("pendente")
-  observacoes String?
-  usuarioId   Int
-  usuario     Usuario  @relation(fields: [usuarioId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              Int      @id @default(autoincrement())
+  dataHora        DateTime @db.Timestamptz(3)
+  dataHoraFim     DateTime? @db.Timestamptz(3)
+  status          String   @default("PENDENTE")
+  observacoes     String?
+  usuarioId       Int
+  massagemId      Int?
+  massagistaId    Int?
+  confirmadoPorId Int?
+  confirmadoEm    DateTime? @db.Timestamptz(3)
+  lembrete24hEnviadoEm DateTime? @db.Timestamptz(3)
+  usuario         Usuario  @relation("AgendamentoCliente", fields: [usuarioId], references: [id])
+  massagem        Massagem? @relation(fields: [massagemId], references: [id], onDelete: Restrict)
+  massagista      Usuario? @relation("AgendamentoMassagista", fields: [massagistaId], references: [id], onDelete: Restrict)
+  confirmadoPor   Usuario? @relation("AgendamentoConfirmadoPor", fields: [confirmadoPorId], references: [id], onDelete: Restrict)
+  solicitacoes    SolicitacaoReagendamento[]
+  historico       AgendamentoHistorico[]
+  notificacoes    Notificacao[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([usuarioId, dataHora])
+  @@index([massagistaId, dataHora])
+  @@index([status, dataHora])
 }
 
 model TokenRevogado {
@@ -50,6 +73,7 @@ model Massagem {
   updatedAt       DateTime            @updatedAt
   materiais       MassagemMaterial[]
   massagistas     MassagistaMassagem[]
+  agendamentos    Agendamento[]
 
   @@index([ativo])
 }
@@ -86,4 +110,85 @@ model MassagistaMassagem {
 
   @@id([usuarioId, massagemId])
   @@index([massagemId])
+}
+
+model HorarioTrabalho {
+  id           Int     @id @default(autoincrement())
+  usuarioId    Int
+  diaSemana    Int
+  inicio       String  @db.VarChar(5)
+  fim          String  @db.VarChar(5)
+  massagista   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, diaSemana])
+}
+
+model BloqueioMassagista {
+  id             Int      @id @default(autoincrement())
+  usuarioId      Int
+  dataHoraInicio DateTime @db.Timestamptz(3)
+  dataHoraFim    DateTime @db.Timestamptz(3)
+  motivo         String
+  massagista     Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, dataHoraInicio, dataHoraFim])
+}
+
+model SolicitacaoReagendamento {
+  id              Int      @id @default(autoincrement())
+  agendamentoId   Int
+  dataHoraSugerida DateTime @db.Timestamptz(3)
+  motivo          String?
+  status          String   @default("PENDENTE")
+  statusAnterior  String
+  respondidoPorId Int?
+  respondidoEm    DateTime? @db.Timestamptz(3)
+  agendamento     Agendamento @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
+  respondidoPor   Usuario? @relation("SolicitacaoRespondidaPor", fields: [respondidoPorId], references: [id], onDelete: Restrict)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([agendamentoId])
+}
+
+model AgendamentoHistorico {
+  id                 Int      @id @default(autoincrement())
+  agendamentoId      Int
+  acao               String
+  autorId            Int
+  valoresAnteriores  Json?
+  valoresNovos       Json?
+  createdAt          DateTime @default(now())
+  agendamento        Agendamento @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
+  autor              Usuario  @relation("HistoricoAutor", fields: [autorId], references: [id], onDelete: Restrict)
+  notificacoes       Notificacao[]
+
+  @@index([agendamentoId, createdAt])
+}
+
+model Notificacao {
+  id                       Int      @id @default(autoincrement())
+  usuarioId                Int
+  agendamentoId            Int
+  historicoId              Int?
+  chaveUnica               String   @unique
+  tipo                     String
+  titulo                   String
+  mensagem                 String
+  lidaEm                   DateTime? @db.Timestamptz(3)
+  emailStatus              String   @default("PENDENTE")
+  emailTentativas          Int      @default(0)
+  emailProximaTentativaEm  DateTime @default(now()) @db.Timestamptz(3)
+  emailProcessandoEm       DateTime? @db.Timestamptz(3)
+  emailEnviadoEm           DateTime? @db.Timestamptz(3)
+  emailErro                String?
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+  usuario                  Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  agendamento              Agendamento @relation(fields: [agendamentoId], references: [id], onDelete: Cascade)
+  historico                AgendamentoHistorico? @relation(fields: [historicoId], references: [id], onDelete: Cascade)
+
+  @@index([usuarioId, lidaEm, createdAt])
+  @@index([emailStatus, emailProximaTentativaEm])
 }

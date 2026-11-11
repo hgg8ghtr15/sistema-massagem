@@ -1,0 +1,85 @@
+[
+  {
+    "id": "column.SolicitacaoReagendamento.statusAnterior",
+    "label": "Add column statusAnterior to SolicitacaoReagendamento",
+    "summary": "Adds column statusAnterior to table SolicitacaoReagendamento",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "SolicitacaoReagendamento"
+      }
+    },
+    "operationClass": "additive",
+    "precheck": [
+      {
+        "description": "ensure column \"statusAnterior\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "SolicitacaoReagendamento",
+          "statusAnterior"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"statusAnterior\" on \"SolicitacaoReagendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"statusAnterior\"",
+        "sql": "ALTER TABLE \"public\".\"SolicitacaoReagendamento\" ADD COLUMN \"statusAnterior\" text DEFAULT ('') NOT NULL"
+      },
+      {
+        "description": "drop temporary default from column \"statusAnterior\"",
+        "sql": "ALTER TABLE \"public\".\"SolicitacaoReagendamento\" ALTER COLUMN \"statusAnterior\" DROP DEFAULT"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"statusAnterior\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "SolicitacaoReagendamento",
+          "statusAnterior"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"statusAnterior\" on \"SolicitacaoReagendamento\""
+        }
+      },
+      {
+        "description": "verify column \"statusAnterior\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "SolicitacaoReagendamento",
+          "statusAnterior",
+          "NO"
+        ]
+      },
+      {
+        "description": "verify column \"statusAnterior\" has no default after temporary default removal",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"column_default\" IS NOT NULL)) AS \"result\"",
+        "params": [
+          "public",
+          "SolicitacaoReagendamento",
+          "statusAnterior"
+        ]
+      },
+      {
+        "description": "verify column \"statusAnterior\" has type \"text\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "SolicitacaoReagendamento",
+          "statusAnterior",
+          "text"
+        ]
+      }
+    ]
+  }
+]

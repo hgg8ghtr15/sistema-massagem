@@ -1,0 +1,411 @@
+[
+  {
+    "id": "table.Notificacao",
+    "label": "Create table \"Notificacao\"",
+    "summary": "Creates table \"Notificacao\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Notificacao"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"Notificacao\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Notificacao\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"Notificacao\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"Notificacao\"",
+        "sql": "CREATE TABLE \"public\".\"Notificacao\" (\n  \"agendamentoId\" int4 NOT NULL,\n  \"chaveUnica\" text NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"emailEnviadoEm\" timestamptz(3),\n  \"emailErro\" text,\n  \"emailProcessandoEm\" timestamptz(3),\n  \"emailProximaTentativaEm\" timestamptz(3) DEFAULT (now()) NOT NULL,\n  \"emailStatus\" text DEFAULT 'PENDENTE' NOT NULL,\n  \"emailTentativas\" int4 DEFAULT 0 NOT NULL,\n  \"historicoId\" int4,\n  \"id\" SERIAL NOT NULL,\n  \"lidaEm\" timestamptz(3),\n  \"mensagem\" text NOT NULL,\n  \"tipo\" text NOT NULL,\n  \"titulo\" text NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  \"usuarioId\" int4 NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"Notificacao\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"Notificacao\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"Notificacao\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "column.public.Agendamento.lembrete24hEnviadoEm",
+    "label": "Add column \"lembrete24hEnviadoEm\" to \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "lembrete24hEnviadoEm",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"lembrete24hEnviadoEm\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "lembrete24hEnviadoEm"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"lembrete24hEnviadoEm\" on \"Agendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"lembrete24hEnviadoEm\"",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\" ADD COLUMN \"lembrete24hEnviadoEm\" timestamptz(3)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"lembrete24hEnviadoEm\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "lembrete24hEnviadoEm"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"lembrete24hEnviadoEm\" on \"Agendamento\""
+        }
+      },
+      {
+        "description": "verify column \"lembrete24hEnviadoEm\" has type \"timestamp(3) with time zone\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "lembrete24hEnviadoEm",
+          "timestamp(3) with time zone"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Notificacao.Notificacao_chaveUnica_key",
+    "label": "Create index \"Notificacao_chaveUnica_key\" on \"Notificacao\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Notificacao_chaveUnica_key",
+        "table": "Notificacao"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Notificacao_chaveUnica_key\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Notificacao_chaveUnica_key\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Notificacao_chaveUnica_key\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Notificacao_chaveUnica_key\"",
+        "sql": "CREATE UNIQUE INDEX \"Notificacao_chaveUnica_key\" ON \"public\".\"Notificacao\" (\"chaveUnica\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Notificacao_chaveUnica_key\" exists on \"Notificacao\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND \"i\".\"indisunique\" AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Notificacao_chaveUnica_key\"",
+          "i",
+          "I",
+          "\"public\".\"Notificacao\"",
+          "btree",
+          "[\"chaveUnica\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Notificacao.Notificacao_emailStatus_emailProximaTentativaEm_idx",
+    "label": "Create index \"Notificacao_emailStatus_emailProximaTentativaEm_idx\" on \"Notificacao\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Notificacao_emailStatus_emailProximaTentativaEm_idx",
+        "table": "Notificacao"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Notificacao_emailStatus_emailProximaTentativaEm_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Notificacao_emailStatus_emailProximaTentativaEm_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Notificacao_emailStatus_emailProximaTentativaEm_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Notificacao_emailStatus_emailProximaTentativaEm_idx\"",
+        "sql": "CREATE INDEX \"Notificacao_emailStatus_emailProximaTentativaEm_idx\" ON \"public\".\"Notificacao\" (\"emailStatus\", \"emailProximaTentativaEm\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Notificacao_emailStatus_emailProximaTentativaEm_idx\" exists on \"Notificacao\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Notificacao_emailStatus_emailProximaTentativaEm_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Notificacao\"",
+          "btree",
+          "[\"emailStatus\",\"emailProximaTentativaEm\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Notificacao.Notificacao_usuarioId_lidaEm_createdAt_idx",
+    "label": "Create index \"Notificacao_usuarioId_lidaEm_createdAt_idx\" on \"Notificacao\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Notificacao_usuarioId_lidaEm_createdAt_idx",
+        "table": "Notificacao"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Notificacao_usuarioId_lidaEm_createdAt_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Notificacao_usuarioId_lidaEm_createdAt_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Notificacao_usuarioId_lidaEm_createdAt_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Notificacao_usuarioId_lidaEm_createdAt_idx\"",
+        "sql": "CREATE INDEX \"Notificacao_usuarioId_lidaEm_createdAt_idx\" ON \"public\".\"Notificacao\" (\"usuarioId\", \"lidaEm\", \"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Notificacao_usuarioId_lidaEm_createdAt_idx\" exists on \"Notificacao\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Notificacao_usuarioId_lidaEm_createdAt_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Notificacao\"",
+          "btree",
+          "[\"usuarioId\",\"lidaEm\",\"createdAt\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Notificacao.Notificacao_usuarioId_fkey",
+    "label": "Add foreign key \"Notificacao_usuarioId_fkey\" on \"Notificacao\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Notificacao_usuarioId_fkey",
+        "table": "Notificacao"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Notificacao_usuarioId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Notificacao_usuarioId_fkey",
+          "public",
+          "\"public\".\"Notificacao\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Notificacao_usuarioId_fkey\" on \"Notificacao\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Notificacao_usuarioId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Notificacao\"\nADD CONSTRAINT \"Notificacao_usuarioId_fkey\"\nFOREIGN KEY (\"usuarioId\")\nREFERENCES \"public\".\"Usuario\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Notificacao_usuarioId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Notificacao_usuarioId_fkey",
+          "public",
+          "\"public\".\"Notificacao\"",
+          "f",
+          "[\"usuarioId\"]",
+          "\"public\".\"Usuario\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Notificacao.Notificacao_agendamentoId_fkey",
+    "label": "Add foreign key \"Notificacao_agendamentoId_fkey\" on \"Notificacao\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Notificacao_agendamentoId_fkey",
+        "table": "Notificacao"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Notificacao_agendamentoId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Notificacao_agendamentoId_fkey",
+          "public",
+          "\"public\".\"Notificacao\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Notificacao_agendamentoId_fkey\" on \"Notificacao\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Notificacao_agendamentoId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Notificacao\"\nADD CONSTRAINT \"Notificacao_agendamentoId_fkey\"\nFOREIGN KEY (\"agendamentoId\")\nREFERENCES \"public\".\"Agendamento\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Notificacao_agendamentoId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Notificacao_agendamentoId_fkey",
+          "public",
+          "\"public\".\"Notificacao\"",
+          "f",
+          "[\"agendamentoId\"]",
+          "\"public\".\"Agendamento\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Notificacao.Notificacao_historicoId_fkey",
+    "label": "Add foreign key \"Notificacao_historicoId_fkey\" on \"Notificacao\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Notificacao_historicoId_fkey",
+        "table": "Notificacao"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Notificacao_historicoId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Notificacao_historicoId_fkey",
+          "public",
+          "\"public\".\"Notificacao\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Notificacao_historicoId_fkey\" on \"Notificacao\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Notificacao_historicoId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Notificacao\"\nADD CONSTRAINT \"Notificacao_historicoId_fkey\"\nFOREIGN KEY (\"historicoId\")\nREFERENCES \"public\".\"AgendamentoHistorico\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Notificacao_historicoId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Notificacao_historicoId_fkey",
+          "public",
+          "\"public\".\"Notificacao\"",
+          "f",
+          "[\"historicoId\"]",
+          "\"public\".\"AgendamentoHistorico\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  }
+]

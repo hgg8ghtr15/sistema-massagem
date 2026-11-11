@@ -75,6 +75,12 @@ Principais variáveis:
 - `DATABASE_URL` — string de conexão PostgreSQL
 - `JWT_SECRET` — segredo para assinar tokens JWT
 - `PORT` — porta do servidor (padrão: 3000)
+- `AGENDAMENTO_FUSO_HORARIO` — fuso dos horários locais (padrão: `America/Cuiaba`)
+- `AGENDAMENTO_ANTECEDENCIA_MINIMA_MINUTOS` — antecedência mínima para agendar (padrão: `120`)
+- `AGENDAMENTO_ANTECEDENCIA_CANCELAMENTO_MINUTOS` — antecedência mínima para cancelamento do cliente (padrão: `240`)
+- `AGENDAMENTO_INTERVALO_MINUTOS` — intervalo entre atendimentos (padrão: `10`)
+- `AGENDAMENTO_GRANULARIDADE_MINUTOS` — granularidade de horários (padrão: `30`)
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD` e `SMTP_FROM` — transporte SMTP para entrega de e-mails; sem `SMTP_HOST`, notificações internas continuam ativas e os e-mails ficam pendentes
 
 ---
 
@@ -133,6 +139,8 @@ http://localhost:3000/docs
 | **Auth** | Login, logout, renovação de token |
 | **Usuários** | Cadastro, listagem, alteração de perfil |
 | **Massagens** | Catálogo de massagens, materiais, vínculos com massagistas |
+| **Agendamentos** | Agenda, horários livres e solicitações de reagendamento |
+| **Notificações** | Caixa de entrada interna e status de entrega de e-mail |
 | **Materiais** | Catálogo de materiais reutilizáveis |
 | **Health** | Verificação de saúde da aplicação |
 
@@ -156,10 +164,26 @@ Todas as rotas estão sob `/api`.
 |--------|------|-----------|--------|
 | `POST` | `/register` | Cadastra cliente (perfil `CLIENTE`) | Público |
 | `GET` | `/` | Lista usuários | `ADMIN` |
+| `GET` | `/massagistas` | Lista massagistas para configuração de expediente | `ADMIN` |
+| `GET` | `/:id/horarios-trabalho` | Consulta a grade semanal da massagista | `ADMIN` |
+| `PUT` | `/:id/horarios-trabalho` | Substitui todos os intervalos semanais da massagista | `ADMIN` |
 | `PATCH` | `/:id/perfil` | Adiciona um perfil ao usuário | `ADMIN` |
 | `PATCH` | `/:id/perfis` | Substitui todos os perfis do usuário | `ADMIN` |
 
 **Perfis disponíveis:** `CLIENTE` (padrão), `ADMIN`, `ADMINISTRATIVO`, `MASSAGISTA`. Um usuário pode ter mais de um perfil. Cadastros públicos sempre começam como cliente; somente administradores autenticados podem listar usuários ou alterar seus perfis.
+
+#### Horários de trabalho
+Envie a grade semanal completa em `PUT /api/usuarios/:id/horarios-trabalho`. `diaSemana` usa domingo = 0 e sábado = 6. Uma lista vazia remove todos os horários cadastrados para a massagista.
+```json
+{
+  "horarios": [
+    { "diaSemana": 1, "inicio": "09:00", "fim": "12:00" },
+    { "diaSemana": 1, "inicio": "13:00", "fim": "17:00" },
+    { "diaSemana": 2, "inicio": "09:00", "fim": "17:00" }
+  ]
+}
+```
+Os intervalos devem usar `HH:mm`, terminar depois do início e não se sobrepor no mesmo dia. A substituição da grade é feita em uma transação.
 
 > Para criar o primeiro `ADMIN`, atualize direto no banco:
 > ```sql
@@ -213,6 +237,41 @@ Catálogo de tipos de massagem oferecidos pela clínica.
 
 #### Vínculo massagista (`PUT /api/massagens/:id/massagistas/:usuarioId`)
 - Usuário deve ter perfil `MASSAGISTA`
+
+### Agendamentos (`/api/agendamentos`)
+
+Todas as rotas exigem JWT. Clientes consultam apenas os próprios agendamentos e solicitações; massagistas consultam a própria agenda; `ADMIN` e `ADMINISTRATIVO` podem gerenciar todos.
+
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `GET` | `/horarios-livres?data=AAAA-MM-DD&massagemId=1&massagistaId=2` | Lista horários livres. Omita `massagistaId` para consultar qualquer disponível | Autenticado |
+| `GET` | `/opcoes-filtro` | Lista IDs e nomes de clientes e massagistas para os filtros da gestão, sem e-mails | `ADMIN` ou `ADMINISTRATIVO` |
+| `GET` | `/` | Lista com filtros `data`, `massagistaId`, `clienteId`, `status`, `page` e `limit` | Escopo do perfil |
+| `POST` | `/` | Cria agendamento pendente | Todos os perfis |
+| `GET` | `/:id` | Detalha agendamento, solicitações e histórico | Cliente dono, massagista responsável ou gestor |
+| `POST` | `/:id/confirmar` | Confirma agendamento | Massagista responsável ou gestor |
+| `POST` | `/:id/cancelar` | Cancela agendamento; aceita `motivo` opcional | Cliente dono, massagista responsável ou gestor |
+| `POST` | `/:id/reagendar` | Reagenda diretamente | `ADMIN` ou `ADMINISTRATIVO` |
+| `POST` | `/:id/solicitacoes-reagendamento` | Solicita reagendamento com `dataHoraSugerida` e `motivo` opcional | Cliente dono |
+| `GET` | `/solicitacoes-reagendamento` | Lista solicitações próprias ou gerenciáveis; aceita `status`, `page` e `limit` | Cliente ou gestor |
+| `POST` | `/solicitacoes-reagendamento/:id/responder` | Aprova (`{"aprovar":true}`) ou recusa | `ADMIN` ou `ADMINISTRATIVO` |
+| `POST` | `/:id/concluir` | Marca atendimento como concluído | Massagista responsável ou gestor |
+| `POST` | `/:id/nao-compareceu` | Marca ausência do cliente | Massagista responsável ou gestor |
+
+`dataHora` e `dataHoraSugerida` devem ser ISO 8601 com fuso explícito, por exemplo `2027-03-10T10:00:00-04:00`. O filtro `data` e a consulta de horários livres usam o fuso configurado em `AGENDAMENTO_FUSO_HORARIO`. Os horários livres retornam `dataHora`, `dataHoraFim` e `massagistaIds` por horário; o término é calculado no servidor com a duração da massagem.
+
+Listagens retornam `data` e `pagination` (`page`, `limit`, `hasMore`); o limite máximo por página é 100. Os status aceitos são `PENDENTE`, `CONFIRMADO`, `REAGENDAMENTO_SOLICITADO`, `REAGENDADO`, `CONCLUIDO`, `CANCELADO` e `NAO_COMPARECEU`.
+
+### Notificações (`/api/notificacoes`)
+
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| `GET` | `/` | Lista as notificações do usuário autenticado (`page`, `limit`) | Autenticado |
+| `PATCH` | `/:id/lida` | Marca uma notificação própria como lida | Dono da notificação |
+
+Novos agendamentos, confirmações, reagendamentos, cancelamentos, solicitações e respostas geram notificações internas e itens de entrega de e-mail na mesma transação da alteração. Solicitações também notificam os perfis `ADMIN` e `ADMINISTRATIVO`. O worker processa e-mails a cada minuto, com até três tentativas. Um lembrete interno/e-mail é criado uma vez, cerca de 24 horas antes, para cliente e massagista; reagendamentos habilitam um novo lembrete.
+
+Configure o transporte SMTP no `.env` para enviar e-mails. Se `SMTP_HOST` estiver ausente, o serviço registra um aviso e mantém as entregas em estado pendente, sem bloquear agendamentos ou notificações internas.
 - Massagem deve estar ativa
 - Impede vínculos duplicados
 
@@ -321,6 +380,16 @@ model MassagistaMassagem {
 - **Apenas ADMIN gerencia catálogo**: criação, edição, arquivamento, vínculos
 - **Massagista só atende massagens vinculadas**: verificado no servidor
 
+### Modelagem de agendamentos
+
+- `Agendamento` registra início e término como instantes (`timestamptz`), massagem, cliente, massagista e dados de confirmação. O término é calculado a partir de `Massagem.duracaoMinutos`.
+- `Notificacao` guarda a caixa de entrada, a leitura e o estado/retries de entrega de e-mail; `Agendamento.lembrete24hEnviadoEm` evita lembretes duplicados.
+- `HorarioTrabalho` guarda o dia da semana (`0` = domingo, `6` = sábado) e o expediente local em `HH:mm`.
+- `BloqueioMassagista` guarda intervalos indisponíveis; `SolicitacaoReagendamento` registra sugestões e respostas; `AgendamentoHistorico` registra autor, ação e valores anteriores/novos.
+- A constraint PostgreSQL `Agendamento_active_time_no_overlap` usa `btree_gist` e `tstzrange` para impedir sobreposição entre agendamentos ativos da mesma massagista. Registros antigos podem manter massagista, massagem ou término nulos; novas operações devem preencher esses vínculos.
+- Os horários locais de atendimento usam o fuso `America/Cuiaba`.
+- `AgendamentosService` centraliza disponibilidade, duração, antecedência, expediente, bloqueios, conflitos, permissões e histórico. O fluxo começa em `PENDENTE`; confirmação e reagendamento têm transições explícitas, e recusar um pedido restaura o status anterior.
+
 ---
 
 ## 🔧 Comandos Úteis (Prisma)
@@ -346,6 +415,7 @@ $ npx prisma studio
 ```
 
 > Migrations ficam em `migrations/app/` (não em `prisma/migrations/`).
+> O Prisma Contract usado pelo projeto não oferece rollback automático. Para reverter uma mudança, planeje uma nova migration para frente; objetos SQL manuais, como a constraint de sobreposição, também precisam ser removidos explicitamente.
 
 ---
 

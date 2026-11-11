@@ -1,0 +1,1508 @@
+[
+  {
+    "id": "table.AgendamentoHistorico",
+    "label": "Create table \"AgendamentoHistorico\"",
+    "summary": "Creates table \"AgendamentoHistorico\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "AgendamentoHistorico"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"AgendamentoHistorico\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AgendamentoHistorico\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"AgendamentoHistorico\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"AgendamentoHistorico\"",
+        "sql": "CREATE TABLE \"public\".\"AgendamentoHistorico\" (\n  \"acao\" text NOT NULL,\n  \"agendamentoId\" int4 NOT NULL,\n  \"autorId\" int4 NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"valoresAnteriores\" jsonb,\n  \"valoresNovos\" jsonb,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"AgendamentoHistorico\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"AgendamentoHistorico\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"AgendamentoHistorico\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.BloqueioMassagista",
+    "label": "Create table \"BloqueioMassagista\"",
+    "summary": "Creates table \"BloqueioMassagista\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "BloqueioMassagista"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"BloqueioMassagista\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"BloqueioMassagista\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"BloqueioMassagista\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"BloqueioMassagista\"",
+        "sql": "CREATE TABLE \"public\".\"BloqueioMassagista\" (\n  \"dataHoraFim\" timestamptz(3) NOT NULL,\n  \"dataHoraInicio\" timestamptz(3) NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"motivo\" text NOT NULL,\n  \"usuarioId\" int4 NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"BloqueioMassagista\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"BloqueioMassagista\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"BloqueioMassagista\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.HorarioTrabalho",
+    "label": "Create table \"HorarioTrabalho\"",
+    "summary": "Creates table \"HorarioTrabalho\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "HorarioTrabalho"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"HorarioTrabalho\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"HorarioTrabalho\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"HorarioTrabalho\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"HorarioTrabalho\"",
+        "sql": "CREATE TABLE \"public\".\"HorarioTrabalho\" (\n  \"diaSemana\" int4 NOT NULL,\n  \"fim\" character varying(5) NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"inicio\" character varying(5) NOT NULL,\n  \"usuarioId\" int4 NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"HorarioTrabalho\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"HorarioTrabalho\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"HorarioTrabalho\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "table.SolicitacaoReagendamento",
+    "label": "Create table \"SolicitacaoReagendamento\"",
+    "summary": "Creates table \"SolicitacaoReagendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "SolicitacaoReagendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"SolicitacaoReagendamento\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SolicitacaoReagendamento\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "table \"SolicitacaoReagendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"SolicitacaoReagendamento\"",
+        "sql": "CREATE TABLE \"public\".\"SolicitacaoReagendamento\" (\n  \"agendamentoId\" int4 NOT NULL,\n  \"createdAt\" timestamp(3) DEFAULT (now()) NOT NULL,\n  \"dataHoraSugerida\" timestamptz(3) NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"motivo\" text,\n  \"respondidoEm\" timestamptz(3),\n  \"respondidoPorId\" int4,\n  \"status\" text DEFAULT 'PENDENTE' NOT NULL,\n  \"updatedAt\" timestamp(3) NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"SolicitacaoReagendamento\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3))) AS \"result\"",
+        "params": [
+          "\"public\".\"SolicitacaoReagendamento\"",
+          "r",
+          "p"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "table \"SolicitacaoReagendamento\""
+        }
+      }
+    ]
+  },
+  {
+    "id": "column.public.Agendamento.confirmadoEm",
+    "label": "Add column \"confirmadoEm\" to \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "confirmadoEm",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"confirmadoEm\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "confirmadoEm"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"confirmadoEm\" on \"Agendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"confirmadoEm\"",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\" ADD COLUMN \"confirmadoEm\" timestamptz(3)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"confirmadoEm\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "confirmadoEm"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"confirmadoEm\" on \"Agendamento\""
+        }
+      },
+      {
+        "description": "verify column \"confirmadoEm\" has type \"timestamp(3) with time zone\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "confirmadoEm",
+          "timestamp(3) with time zone"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Agendamento.confirmadoPorId",
+    "label": "Add column \"confirmadoPorId\" to \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "confirmadoPorId",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"confirmadoPorId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "confirmadoPorId"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"confirmadoPorId\" on \"Agendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"confirmadoPorId\"",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\" ADD COLUMN \"confirmadoPorId\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"confirmadoPorId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "confirmadoPorId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"confirmadoPorId\" on \"Agendamento\""
+        }
+      },
+      {
+        "description": "verify column \"confirmadoPorId\" has type \"integer\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "confirmadoPorId",
+          "integer"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Agendamento.dataHoraFim",
+    "label": "Add column \"dataHoraFim\" to \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "dataHoraFim",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"dataHoraFim\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "dataHoraFim"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"dataHoraFim\" on \"Agendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"dataHoraFim\"",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\" ADD COLUMN \"dataHoraFim\" timestamptz(3)"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"dataHoraFim\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "dataHoraFim"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"dataHoraFim\" on \"Agendamento\""
+        }
+      },
+      {
+        "description": "verify column \"dataHoraFim\" has type \"timestamp(3) with time zone\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "dataHoraFim",
+          "timestamp(3) with time zone"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Agendamento.massagemId",
+    "label": "Add column \"massagemId\" to \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "massagemId",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"massagemId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "massagemId"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"massagemId\" on \"Agendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"massagemId\"",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\" ADD COLUMN \"massagemId\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"massagemId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "massagemId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"massagemId\" on \"Agendamento\""
+        }
+      },
+      {
+        "description": "verify column \"massagemId\" has type \"integer\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "massagemId",
+          "integer"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "column.public.Agendamento.massagistaId",
+    "label": "Add column \"massagistaId\" to \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "massagistaId",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"massagistaId\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "massagistaId"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "column \"massagistaId\" on \"Agendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"massagistaId\"",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\" ADD COLUMN \"massagistaId\" int4"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"massagistaId\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "massagistaId"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"massagistaId\" on \"Agendamento\""
+        }
+      },
+      {
+        "description": "verify column \"massagistaId\" has type \"integer\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "massagistaId",
+          "integer"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterType.Agendamento.dataHora",
+    "label": "Alter type of \"Agendamento\".\"dataHora\" to timestamptz(3)",
+    "operationClass": "data",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "dataHora",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"dataHora\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "dataHora"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"dataHora\" on \"Agendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "alter type of \"dataHora\" to timestamptz(3)",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\" ALTER COLUMN \"dataHora\" TYPE timestamptz(3) USING \"dataHora\" AT TIME ZONE 'America/Cuiaba'",
+        "meta": {
+          "convertedColumn": {
+            "table": "Agendamento",
+            "column": "dataHora",
+            "by": "conversion"
+          }
+        }
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"dataHora\" has type \"timestamp(3) with time zone\"",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_attribute\" AS \"a\" INNER JOIN \"pg_class\" AS \"c\" ON \"c\".\"oid\" = \"a\".\"attrelid\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"relnamespace\" WHERE (\"n\".\"nspname\" = $1 AND \"c\".\"relname\" = $2 AND \"a\".\"attname\" = $3 AND (format_type(\"a\".\"atttypid\", \"a\".\"atttypmod\")) = $4 AND NOT (\"a\".\"attisdropped\"))) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "dataHora",
+          "timestamp(3) with time zone"
+        ]
+      }
+    ],
+    "meta": {
+      "warning": "TABLE_REWRITE"
+    }
+  },
+  {
+    "id": "setDefault.Agendamento.status",
+    "label": "Set default on \"Agendamento\".\"status\"",
+    "operationClass": "widening",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "status",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"status\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "Agendamento",
+          "status"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "column \"status\" on \"Agendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "set default on \"status\"",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\" ALTER COLUMN \"status\" SET DEFAULT 'PENDENTE'"
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "index.Agendamento.Agendamento_massagistaId_dataHora_idx",
+    "label": "Create index \"Agendamento_massagistaId_dataHora_idx\" on \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Agendamento_massagistaId_dataHora_idx",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Agendamento_massagistaId_dataHora_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Agendamento_massagistaId_dataHora_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Agendamento_massagistaId_dataHora_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Agendamento_massagistaId_dataHora_idx\"",
+        "sql": "CREATE INDEX \"Agendamento_massagistaId_dataHora_idx\" ON \"public\".\"Agendamento\" (\"massagistaId\", \"dataHora\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Agendamento_massagistaId_dataHora_idx\" exists on \"Agendamento\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Agendamento_massagistaId_dataHora_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Agendamento\"",
+          "btree",
+          "[\"massagistaId\",\"dataHora\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Agendamento.Agendamento_status_dataHora_idx",
+    "label": "Create index \"Agendamento_status_dataHora_idx\" on \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Agendamento_status_dataHora_idx",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Agendamento_status_dataHora_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Agendamento_status_dataHora_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Agendamento_status_dataHora_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Agendamento_status_dataHora_idx\"",
+        "sql": "CREATE INDEX \"Agendamento_status_dataHora_idx\" ON \"public\".\"Agendamento\" (\"status\", \"dataHora\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Agendamento_status_dataHora_idx\" exists on \"Agendamento\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Agendamento_status_dataHora_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Agendamento\"",
+          "btree",
+          "[\"status\",\"dataHora\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.Agendamento.Agendamento_usuarioId_dataHora_idx",
+    "label": "Create index \"Agendamento_usuarioId_dataHora_idx\" on \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "Agendamento_usuarioId_dataHora_idx",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"Agendamento_usuarioId_dataHora_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"Agendamento_usuarioId_dataHora_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"Agendamento_usuarioId_dataHora_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"Agendamento_usuarioId_dataHora_idx\"",
+        "sql": "CREATE INDEX \"Agendamento_usuarioId_dataHora_idx\" ON \"public\".\"Agendamento\" (\"usuarioId\", \"dataHora\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"Agendamento_usuarioId_dataHora_idx\" exists on \"Agendamento\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"Agendamento_usuarioId_dataHora_idx\"",
+          "i",
+          "I",
+          "\"public\".\"Agendamento\"",
+          "btree",
+          "[\"usuarioId\",\"dataHora\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.AgendamentoHistorico.AgendamentoHistorico_agendamentoId_createdAt_idx",
+    "label": "Create index \"AgendamentoHistorico_agendamentoId_createdAt_idx\" on \"AgendamentoHistorico\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "AgendamentoHistorico_agendamentoId_createdAt_idx",
+        "table": "AgendamentoHistorico"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"AgendamentoHistorico_agendamentoId_createdAt_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"AgendamentoHistorico_agendamentoId_createdAt_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"AgendamentoHistorico_agendamentoId_createdAt_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"AgendamentoHistorico_agendamentoId_createdAt_idx\"",
+        "sql": "CREATE INDEX \"AgendamentoHistorico_agendamentoId_createdAt_idx\" ON \"public\".\"AgendamentoHistorico\" (\"agendamentoId\", \"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"AgendamentoHistorico_agendamentoId_createdAt_idx\" exists on \"AgendamentoHistorico\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"AgendamentoHistorico_agendamentoId_createdAt_idx\"",
+          "i",
+          "I",
+          "\"public\".\"AgendamentoHistorico\"",
+          "btree",
+          "[\"agendamentoId\",\"createdAt\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.BloqueioMassagista.BloqueioMassagista_usuarioId_dataHoraInicio_dataHoraFim_idx",
+    "label": "Create index \"BloqueioMassagista_usuarioId_dataHoraInicio_dataHoraFim_idx\" on \"BloqueioMassagista\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "BloqueioMassagista_usuarioId_dataHoraInicio_dataHoraFim_idx",
+        "table": "BloqueioMassagista"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"BloqueioMassagista_usuarioId_dataHoraInicio_dataHoraFim_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"BloqueioMassagista_usuarioId_dataHoraInicio_dataHoraFim_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"BloqueioMassagista_usuarioId_dataHoraInicio_dataHoraFim_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"BloqueioMassagista_usuarioId_dataHoraInicio_dataHoraFim_idx\"",
+        "sql": "CREATE INDEX \"BloqueioMassagista_usuarioId_dataHoraInicio_dataHoraFim_idx\" ON \"public\".\"BloqueioMassagista\" (\"usuarioId\", \"dataHoraInicio\", \"dataHoraFim\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"BloqueioMassagista_usuarioId_dataHoraInicio_dataHoraFim_idx\" exists on \"BloqueioMassagista\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"BloqueioMassagista_usuarioId_dataHoraInicio_dataHoraFim_idx\"",
+          "i",
+          "I",
+          "\"public\".\"BloqueioMassagista\"",
+          "btree",
+          "[\"usuarioId\",\"dataHoraInicio\",\"dataHoraFim\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.HorarioTrabalho.HorarioTrabalho_usuarioId_diaSemana_idx",
+    "label": "Create index \"HorarioTrabalho_usuarioId_diaSemana_idx\" on \"HorarioTrabalho\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "HorarioTrabalho_usuarioId_diaSemana_idx",
+        "table": "HorarioTrabalho"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"HorarioTrabalho_usuarioId_diaSemana_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"HorarioTrabalho_usuarioId_diaSemana_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"HorarioTrabalho_usuarioId_diaSemana_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"HorarioTrabalho_usuarioId_diaSemana_idx\"",
+        "sql": "CREATE INDEX \"HorarioTrabalho_usuarioId_diaSemana_idx\" ON \"public\".\"HorarioTrabalho\" (\"usuarioId\", \"diaSemana\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"HorarioTrabalho_usuarioId_diaSemana_idx\" exists on \"HorarioTrabalho\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"HorarioTrabalho_usuarioId_diaSemana_idx\"",
+          "i",
+          "I",
+          "\"public\".\"HorarioTrabalho\"",
+          "btree",
+          "[\"usuarioId\",\"diaSemana\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.SolicitacaoReagendamento.SolicitacaoReagendamento_agendamentoId_idx",
+    "label": "Create index \"SolicitacaoReagendamento_agendamentoId_idx\" on \"SolicitacaoReagendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "SolicitacaoReagendamento_agendamentoId_idx",
+        "table": "SolicitacaoReagendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"SolicitacaoReagendamento_agendamentoId_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SolicitacaoReagendamento_agendamentoId_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"SolicitacaoReagendamento_agendamentoId_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"SolicitacaoReagendamento_agendamentoId_idx\"",
+        "sql": "CREATE INDEX \"SolicitacaoReagendamento_agendamentoId_idx\" ON \"public\".\"SolicitacaoReagendamento\" (\"agendamentoId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"SolicitacaoReagendamento_agendamentoId_idx\" exists on \"SolicitacaoReagendamento\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"SolicitacaoReagendamento_agendamentoId_idx\"",
+          "i",
+          "I",
+          "\"public\".\"SolicitacaoReagendamento\"",
+          "btree",
+          "[\"agendamentoId\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.SolicitacaoReagendamento.SolicitacaoReagendamento_status_createdAt_idx",
+    "label": "Create index \"SolicitacaoReagendamento_status_createdAt_idx\" on \"SolicitacaoReagendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "SolicitacaoReagendamento_status_createdAt_idx",
+        "table": "SolicitacaoReagendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"SolicitacaoReagendamento_status_createdAt_idx\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"SolicitacaoReagendamento_status_createdAt_idx\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "index \"SolicitacaoReagendamento_status_createdAt_idx\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"SolicitacaoReagendamento_status_createdAt_idx\"",
+        "sql": "CREATE INDEX \"SolicitacaoReagendamento_status_createdAt_idx\" ON \"public\".\"SolicitacaoReagendamento\" (\"status\", \"createdAt\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"SolicitacaoReagendamento_status_createdAt_idx\" exists on \"SolicitacaoReagendamento\" with the planned definition",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_class\" AS \"c\" INNER JOIN \"pg_index\" AS \"i\" ON \"i\".\"indexrelid\" = \"c\".\"oid\" INNER JOIN \"pg_am\" AS \"m\" ON \"m\".\"oid\" = \"c\".\"relam\" WHERE (\"c\".\"oid\" = to_regclass($1) AND (\"c\".\"relkind\" = $2 OR \"c\".\"relkind\" = $3) AND \"i\".\"indrelid\" = to_regclass($4) AND NOT (\"i\".\"indisunique\") AND \"m\".\"amname\" = $5 AND (\"i\".\"indexprs\" IS NULL AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"i\".\"indkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"i\".\"indrelid\" AND key_attribute.attnum = key_column.attnum) = ($6)::jsonb) AND \"i\".\"indpred\" IS NULL)) AS \"result\"",
+        "params": [
+          "\"public\".\"SolicitacaoReagendamento_status_createdAt_idx\"",
+          "i",
+          "I",
+          "\"public\".\"SolicitacaoReagendamento\"",
+          "btree",
+          "[\"status\",\"createdAt\"]"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Agendamento.Agendamento_confirmadoPorId_fkey",
+    "label": "Add foreign key \"Agendamento_confirmadoPorId_fkey\" on \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Agendamento_confirmadoPorId_fkey",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Agendamento_confirmadoPorId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Agendamento_confirmadoPorId_fkey",
+          "public",
+          "\"public\".\"Agendamento\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Agendamento_confirmadoPorId_fkey\" on \"Agendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Agendamento_confirmadoPorId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\"\nADD CONSTRAINT \"Agendamento_confirmadoPorId_fkey\"\nFOREIGN KEY (\"confirmadoPorId\")\nREFERENCES \"public\".\"Usuario\" (\"id\")\nON DELETE RESTRICT\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Agendamento_confirmadoPorId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Agendamento_confirmadoPorId_fkey",
+          "public",
+          "\"public\".\"Agendamento\"",
+          "f",
+          "[\"confirmadoPorId\"]",
+          "\"public\".\"Usuario\"",
+          "[\"id\"]",
+          "r",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Agendamento.Agendamento_massagemId_fkey",
+    "label": "Add foreign key \"Agendamento_massagemId_fkey\" on \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Agendamento_massagemId_fkey",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Agendamento_massagemId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Agendamento_massagemId_fkey",
+          "public",
+          "\"public\".\"Agendamento\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Agendamento_massagemId_fkey\" on \"Agendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Agendamento_massagemId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\"\nADD CONSTRAINT \"Agendamento_massagemId_fkey\"\nFOREIGN KEY (\"massagemId\")\nREFERENCES \"public\".\"Massagem\" (\"id\")\nON DELETE RESTRICT\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Agendamento_massagemId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Agendamento_massagemId_fkey",
+          "public",
+          "\"public\".\"Agendamento\"",
+          "f",
+          "[\"massagemId\"]",
+          "\"public\".\"Massagem\"",
+          "[\"id\"]",
+          "r",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.Agendamento.Agendamento_massagistaId_fkey",
+    "label": "Add foreign key \"Agendamento_massagistaId_fkey\" on \"Agendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "Agendamento_massagistaId_fkey",
+        "table": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"Agendamento_massagistaId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Agendamento_massagistaId_fkey",
+          "public",
+          "\"public\".\"Agendamento\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"Agendamento_massagistaId_fkey\" on \"Agendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"Agendamento_massagistaId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\"\nADD CONSTRAINT \"Agendamento_massagistaId_fkey\"\nFOREIGN KEY (\"massagistaId\")\nREFERENCES \"public\".\"Usuario\" (\"id\")\nON DELETE RESTRICT\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"Agendamento_massagistaId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "Agendamento_massagistaId_fkey",
+          "public",
+          "\"public\".\"Agendamento\"",
+          "f",
+          "[\"massagistaId\"]",
+          "\"public\".\"Usuario\"",
+          "[\"id\"]",
+          "r",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.AgendamentoHistorico.AgendamentoHistorico_agendamentoId_fkey",
+    "label": "Add foreign key \"AgendamentoHistorico_agendamentoId_fkey\" on \"AgendamentoHistorico\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "AgendamentoHistorico_agendamentoId_fkey",
+        "table": "AgendamentoHistorico"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"AgendamentoHistorico_agendamentoId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AgendamentoHistorico_agendamentoId_fkey",
+          "public",
+          "\"public\".\"AgendamentoHistorico\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"AgendamentoHistorico_agendamentoId_fkey\" on \"AgendamentoHistorico\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"AgendamentoHistorico_agendamentoId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"AgendamentoHistorico\"\nADD CONSTRAINT \"AgendamentoHistorico_agendamentoId_fkey\"\nFOREIGN KEY (\"agendamentoId\")\nREFERENCES \"public\".\"Agendamento\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"AgendamentoHistorico_agendamentoId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "AgendamentoHistorico_agendamentoId_fkey",
+          "public",
+          "\"public\".\"AgendamentoHistorico\"",
+          "f",
+          "[\"agendamentoId\"]",
+          "\"public\".\"Agendamento\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.AgendamentoHistorico.AgendamentoHistorico_autorId_fkey",
+    "label": "Add foreign key \"AgendamentoHistorico_autorId_fkey\" on \"AgendamentoHistorico\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "AgendamentoHistorico_autorId_fkey",
+        "table": "AgendamentoHistorico"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"AgendamentoHistorico_autorId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "AgendamentoHistorico_autorId_fkey",
+          "public",
+          "\"public\".\"AgendamentoHistorico\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"AgendamentoHistorico_autorId_fkey\" on \"AgendamentoHistorico\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"AgendamentoHistorico_autorId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"AgendamentoHistorico\"\nADD CONSTRAINT \"AgendamentoHistorico_autorId_fkey\"\nFOREIGN KEY (\"autorId\")\nREFERENCES \"public\".\"Usuario\" (\"id\")\nON DELETE RESTRICT\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"AgendamentoHistorico_autorId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "AgendamentoHistorico_autorId_fkey",
+          "public",
+          "\"public\".\"AgendamentoHistorico\"",
+          "f",
+          "[\"autorId\"]",
+          "\"public\".\"Usuario\"",
+          "[\"id\"]",
+          "r",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.BloqueioMassagista.BloqueioMassagista_usuarioId_fkey",
+    "label": "Add foreign key \"BloqueioMassagista_usuarioId_fkey\" on \"BloqueioMassagista\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "BloqueioMassagista_usuarioId_fkey",
+        "table": "BloqueioMassagista"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"BloqueioMassagista_usuarioId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "BloqueioMassagista_usuarioId_fkey",
+          "public",
+          "\"public\".\"BloqueioMassagista\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"BloqueioMassagista_usuarioId_fkey\" on \"BloqueioMassagista\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"BloqueioMassagista_usuarioId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"BloqueioMassagista\"\nADD CONSTRAINT \"BloqueioMassagista_usuarioId_fkey\"\nFOREIGN KEY (\"usuarioId\")\nREFERENCES \"public\".\"Usuario\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"BloqueioMassagista_usuarioId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "BloqueioMassagista_usuarioId_fkey",
+          "public",
+          "\"public\".\"BloqueioMassagista\"",
+          "f",
+          "[\"usuarioId\"]",
+          "\"public\".\"Usuario\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.HorarioTrabalho.HorarioTrabalho_usuarioId_fkey",
+    "label": "Add foreign key \"HorarioTrabalho_usuarioId_fkey\" on \"HorarioTrabalho\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "HorarioTrabalho_usuarioId_fkey",
+        "table": "HorarioTrabalho"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"HorarioTrabalho_usuarioId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "HorarioTrabalho_usuarioId_fkey",
+          "public",
+          "\"public\".\"HorarioTrabalho\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"HorarioTrabalho_usuarioId_fkey\" on \"HorarioTrabalho\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"HorarioTrabalho_usuarioId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"HorarioTrabalho\"\nADD CONSTRAINT \"HorarioTrabalho_usuarioId_fkey\"\nFOREIGN KEY (\"usuarioId\")\nREFERENCES \"public\".\"Usuario\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"HorarioTrabalho_usuarioId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "HorarioTrabalho_usuarioId_fkey",
+          "public",
+          "\"public\".\"HorarioTrabalho\"",
+          "f",
+          "[\"usuarioId\"]",
+          "\"public\".\"Usuario\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.SolicitacaoReagendamento.SolicitacaoReagendamento_agendamentoId_fkey",
+    "label": "Add foreign key \"SolicitacaoReagendamento_agendamentoId_fkey\" on \"SolicitacaoReagendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "SolicitacaoReagendamento_agendamentoId_fkey",
+        "table": "SolicitacaoReagendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"SolicitacaoReagendamento_agendamentoId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SolicitacaoReagendamento_agendamentoId_fkey",
+          "public",
+          "\"public\".\"SolicitacaoReagendamento\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"SolicitacaoReagendamento_agendamentoId_fkey\" on \"SolicitacaoReagendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"SolicitacaoReagendamento_agendamentoId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"SolicitacaoReagendamento\"\nADD CONSTRAINT \"SolicitacaoReagendamento_agendamentoId_fkey\"\nFOREIGN KEY (\"agendamentoId\")\nREFERENCES \"public\".\"Agendamento\" (\"id\")\nON DELETE CASCADE\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"SolicitacaoReagendamento_agendamentoId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "SolicitacaoReagendamento_agendamentoId_fkey",
+          "public",
+          "\"public\".\"SolicitacaoReagendamento\"",
+          "f",
+          "[\"agendamentoId\"]",
+          "\"public\".\"Agendamento\"",
+          "[\"id\"]",
+          "c",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.SolicitacaoReagendamento.SolicitacaoReagendamento_respondidoPorId_fkey",
+    "label": "Add foreign key \"SolicitacaoReagendamento_respondidoPorId_fkey\" on \"SolicitacaoReagendamento\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "SolicitacaoReagendamento_respondidoPorId_fkey",
+        "table": "SolicitacaoReagendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"SolicitacaoReagendamento_respondidoPorId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "SolicitacaoReagendamento_respondidoPorId_fkey",
+          "public",
+          "\"public\".\"SolicitacaoReagendamento\""
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "FK \"SolicitacaoReagendamento_respondidoPorId_fkey\" on \"SolicitacaoReagendamento\""
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"SolicitacaoReagendamento_respondidoPorId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"SolicitacaoReagendamento\"\nADD CONSTRAINT \"SolicitacaoReagendamento_respondidoPorId_fkey\"\nFOREIGN KEY (\"respondidoPorId\")\nREFERENCES \"public\".\"Usuario\" (\"id\")\nON DELETE RESTRICT\nON UPDATE CASCADE"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"SolicitacaoReagendamento_respondidoPorId_fkey\" exists with the planned columns, referenced table and actions",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3) AND \"c\".\"contype\" = $4 AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"conkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"conrelid\" AND key_attribute.attnum = key_column.attnum) = ($5)::jsonb AND \"c\".\"confrelid\" = to_regclass($6) AND (SELECT coalesce(jsonb_agg(key_attribute.attname ORDER BY key_column.position), '[]'::jsonb) FROM unnest(\"c\".\"confkey\"::int2[]) WITH ORDINALITY AS key_column(attnum, position) JOIN pg_attribute key_attribute ON key_attribute.attrelid = \"c\".\"confrelid\" AND key_attribute.attnum = key_column.attnum) = ($7)::jsonb AND \"c\".\"confdeltype\" = $8 AND \"c\".\"confupdtype\" = $9)) AS \"result\"",
+        "params": [
+          "SolicitacaoReagendamento_respondidoPorId_fkey",
+          "public",
+          "\"public\".\"SolicitacaoReagendamento\"",
+          "f",
+          "[\"respondidoPorId\"]",
+          "\"public\".\"Usuario\"",
+          "[\"id\"]",
+          "r",
+          "c"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "extension.btree_gist",
+    "label": "Create extension \"btree_gist\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres"
+    },
+    "precheck": [],
+    "execute": [
+      {
+        "description": "Create extension \"btree_gist\"",
+        "sql": "CREATE EXTENSION IF NOT EXISTS \"btree_gist\""
+      }
+    ],
+    "postcheck": []
+  },
+  {
+    "id": "constraint.public.Agendamento.active_time_no_overlap",
+    "label": "Prevent overlapping active appointments",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "Agendamento"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure active appointment exclusion constraint is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 FROM \"pg_constraint\" WHERE \"conname\" = $1 AND \"conrelid\" = '\"public\".\"Agendamento\"'::regclass) AS \"result\"",
+        "params": [
+          "Agendamento_active_time_no_overlap"
+        ],
+        "expectation": {
+          "expects": "absent",
+          "object": "constraint Agendamento_active_time_no_overlap"
+        }
+      }
+    ],
+    "execute": [
+      {
+        "description": "normalize existing appointment statuses",
+        "sql": "UPDATE \"public\".\"Agendamento\"\n              SET \"status\" = CASE lower(\"status\")\n                WHEN 'pendente' THEN 'PENDENTE'\n                WHEN 'confirmado' THEN 'CONFIRMADO'\n                WHEN 'reagendamento solicitado' THEN 'REAGENDAMENTO_SOLICITADO'\n                WHEN 'reagendado' THEN 'REAGENDADO'\n                WHEN 'concluído' THEN 'CONCLUIDO'\n                WHEN 'concluido' THEN 'CONCLUIDO'\n                WHEN 'cancelado' THEN 'CANCELADO'\n                WHEN 'não compareceu' THEN 'NAO_COMPARECEU'\n                WHEN 'nao_compareceu' THEN 'NAO_COMPARECEU'\n                ELSE \"status\"\n              END"
+      },
+      {
+        "description": "add exclusion constraint for overlapping active appointments",
+        "sql": "ALTER TABLE \"public\".\"Agendamento\"\n              ADD CONSTRAINT \"Agendamento_active_time_no_overlap\"\n              EXCLUDE USING gist (\n                \"massagistaId\" WITH =,\n                tstzrange(\"dataHora\", \"dataHoraFim\", '[)') WITH &&\n              )\n              WHERE (\n                \"massagistaId\" IS NOT NULL\n                AND \"dataHoraFim\" IS NOT NULL\n                AND \"status\" IN (\n                  'PENDENTE',\n                  'CONFIRMADO',\n                  'REAGENDAMENTO_SOLICITADO',\n                  'REAGENDADO'\n                )\n              )"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify active appointment exclusion constraint exists",
+        "sql": "SELECT EXISTS (SELECT 1 FROM \"pg_constraint\" WHERE \"conname\" = $1 AND \"conrelid\" = '\"public\".\"Agendamento\"'::regclass) AS \"result\"",
+        "params": [
+          "Agendamento_active_time_no_overlap"
+        ],
+        "expectation": {
+          "expects": "present",
+          "object": "constraint Agendamento_active_time_no_overlap"
+        }
+      }
+    ]
+  }
+]

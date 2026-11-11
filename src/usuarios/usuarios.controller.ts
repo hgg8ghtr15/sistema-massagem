@@ -6,6 +6,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -17,6 +18,7 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { RegisterDto } from './dto/register.dto';
+import { SubstituirHorariosTrabalhoDto } from './dto/substituir-horarios-trabalho.dto';
 import { UpdatePerfilDto, UpdatePerfisDto } from './dto/update-perfil.dto';
 import { UsuariosService } from './usuarios.service';
 
@@ -40,6 +42,33 @@ export class UsuariosController {
   @ApiOperation({ summary: 'Listar usuários (somente admin)' })
   listar() {
     return this.usuariosService.listar();
+  }
+
+  @Get('massagistas')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Listar massagistas para configuração administrativa' })
+  listarMassagistas() {
+    return this.usuariosService.listarMassagistas();
+  }
+
+  @Get(':id/horarios-trabalho')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Consultar horários de trabalho de uma massagista' })
+  horariosTrabalho(@Param('id', ParseIntPipe) id: number) {
+    return this.usuariosService.horariosTrabalho(id);
+  }
+
+  @Put(':id/horarios-trabalho')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Substituir a grade semanal de uma massagista' })
+  substituirHorariosTrabalho(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: SubstituirHorariosTrabalhoDto,
+  ) {
+    return this.usuariosService.substituirHorariosTrabalho(id, dto.horarios);
   }
 
   @Patch(':id/perfil')

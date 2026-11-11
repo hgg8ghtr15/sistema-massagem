@@ -23,9 +23,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'ca0a5e44afd8a4100bb52775268785feb9d530a07195d6198c26c9fd3c87b44d'>;
+  StorageHashBase<'9cc748ae20be64f91f86a91cc29f509f206f76a3c73b9703c59f2db90e1c2f07'>;
 export type ExecutionHash =
-  ExecutionHashBase<'6fdf9b44786d6ac8722f89de33ca6101f2aa8a20f3459e7c8b22f4650dd748c2'>;
+  ExecutionHashBase<'0b02b08e3fbc3a1ead6be46285739663c60a698a4491b98a026d1c97b1db2077'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -271,15 +271,65 @@ export type StorageColumnInputTypes = ColumnTypesFromStorage<
 
 export namespace Models {
   export type public_Agendamento = {
+    confirmadoEm: FieldOutputTypes['public']['Agendamento']['confirmadoEm'];
+    confirmadoPorId: FieldOutputTypes['public']['Agendamento']['confirmadoPorId'];
     createdAt: FieldOutputTypes['public']['Agendamento']['createdAt'];
     dataHora: FieldOutputTypes['public']['Agendamento']['dataHora'];
+    dataHoraFim: FieldOutputTypes['public']['Agendamento']['dataHoraFim'];
     id: FieldOutputTypes['public']['Agendamento']['id'];
+    lembrete24hEnviadoEm: FieldOutputTypes['public']['Agendamento']['lembrete24hEnviadoEm'];
+    massagemId: FieldOutputTypes['public']['Agendamento']['massagemId'];
+    massagistaId: FieldOutputTypes['public']['Agendamento']['massagistaId'];
     observacoes: FieldOutputTypes['public']['Agendamento']['observacoes'];
     status: FieldOutputTypes['public']['Agendamento']['status'];
     updatedAt: FieldOutputTypes['public']['Agendamento']['updatedAt'];
     usuarioId: FieldOutputTypes['public']['Agendamento']['usuarioId'];
+    confirmadoPor: public_Usuario | null;
+    historico: public_AgendamentoHistorico[];
+    massagem: public_Massagem | null;
+    massagista: public_Usuario | null;
+    notificacoes: public_Notificacao[];
+    solicitacoes: public_SolicitacaoReagendamento[];
     usuario: public_Usuario;
-    readonly [RelationKeys]?: 'usuario';
+    readonly [RelationKeys]?:
+      | 'confirmadoPor'
+      | 'historico'
+      | 'massagem'
+      | 'massagista'
+      | 'notificacoes'
+      | 'solicitacoes'
+      | 'usuario';
+  };
+  export type public_AgendamentoHistorico = {
+    acao: FieldOutputTypes['public']['AgendamentoHistorico']['acao'];
+    agendamentoId: FieldOutputTypes['public']['AgendamentoHistorico']['agendamentoId'];
+    autorId: FieldOutputTypes['public']['AgendamentoHistorico']['autorId'];
+    createdAt: FieldOutputTypes['public']['AgendamentoHistorico']['createdAt'];
+    id: FieldOutputTypes['public']['AgendamentoHistorico']['id'];
+    valoresAnteriores: FieldOutputTypes['public']['AgendamentoHistorico']['valoresAnteriores'];
+    valoresNovos: FieldOutputTypes['public']['AgendamentoHistorico']['valoresNovos'];
+    agendamento: public_Agendamento;
+    autor: public_Usuario;
+    notificacoes: public_Notificacao[];
+    readonly [RelationKeys]?: 'agendamento' | 'autor' | 'notificacoes';
+  };
+  export type public_BloqueioMassagista = {
+    dataHoraFim: FieldOutputTypes['public']['BloqueioMassagista']['dataHoraFim'];
+    dataHoraInicio: FieldOutputTypes['public']['BloqueioMassagista']['dataHoraInicio'];
+    id: FieldOutputTypes['public']['BloqueioMassagista']['id'];
+    motivo: FieldOutputTypes['public']['BloqueioMassagista']['motivo'];
+    usuarioId: FieldOutputTypes['public']['BloqueioMassagista']['usuarioId'];
+    massagista: public_Usuario;
+    readonly [RelationKeys]?: 'massagista';
+  };
+  export type public_HorarioTrabalho = {
+    diaSemana: FieldOutputTypes['public']['HorarioTrabalho']['diaSemana'];
+    fim: FieldOutputTypes['public']['HorarioTrabalho']['fim'];
+    id: FieldOutputTypes['public']['HorarioTrabalho']['id'];
+    inicio: FieldOutputTypes['public']['HorarioTrabalho']['inicio'];
+    usuarioId: FieldOutputTypes['public']['HorarioTrabalho']['usuarioId'];
+    massagista: public_Usuario;
+    readonly [RelationKeys]?: 'massagista';
   };
   export type public_Massagem = {
     ativo: FieldOutputTypes['public']['Massagem']['ativo'];
@@ -291,9 +341,10 @@ export namespace Models {
     updatedAt: FieldOutputTypes['public']['Massagem']['updatedAt'];
     valorCentavos: FieldOutputTypes['public']['Massagem']['valorCentavos'];
     youtubeUrl: FieldOutputTypes['public']['Massagem']['youtubeUrl'];
+    agendamentos: public_Agendamento[];
     massagistas: public_MassagistaMassagem[];
     materiais: public_MassagemMaterial[];
-    readonly [RelationKeys]?: 'massagistas' | 'materiais';
+    readonly [RelationKeys]?: 'agendamentos' | 'massagistas' | 'materiais';
   };
   export type public_MassagemMaterial = {
     massagemId: FieldOutputTypes['public']['MassagemMaterial']['massagemId'];
@@ -321,6 +372,44 @@ export namespace Models {
     massagens: public_MassagemMaterial[];
     readonly [RelationKeys]?: 'massagens';
   };
+  export type public_Notificacao = {
+    agendamentoId: FieldOutputTypes['public']['Notificacao']['agendamentoId'];
+    chaveUnica: FieldOutputTypes['public']['Notificacao']['chaveUnica'];
+    createdAt: FieldOutputTypes['public']['Notificacao']['createdAt'];
+    emailEnviadoEm: FieldOutputTypes['public']['Notificacao']['emailEnviadoEm'];
+    emailErro: FieldOutputTypes['public']['Notificacao']['emailErro'];
+    emailProcessandoEm: FieldOutputTypes['public']['Notificacao']['emailProcessandoEm'];
+    emailProximaTentativaEm: FieldOutputTypes['public']['Notificacao']['emailProximaTentativaEm'];
+    emailStatus: FieldOutputTypes['public']['Notificacao']['emailStatus'];
+    emailTentativas: FieldOutputTypes['public']['Notificacao']['emailTentativas'];
+    historicoId: FieldOutputTypes['public']['Notificacao']['historicoId'];
+    id: FieldOutputTypes['public']['Notificacao']['id'];
+    lidaEm: FieldOutputTypes['public']['Notificacao']['lidaEm'];
+    mensagem: FieldOutputTypes['public']['Notificacao']['mensagem'];
+    tipo: FieldOutputTypes['public']['Notificacao']['tipo'];
+    titulo: FieldOutputTypes['public']['Notificacao']['titulo'];
+    updatedAt: FieldOutputTypes['public']['Notificacao']['updatedAt'];
+    usuarioId: FieldOutputTypes['public']['Notificacao']['usuarioId'];
+    agendamento: public_Agendamento;
+    historico: public_AgendamentoHistorico | null;
+    usuario: public_Usuario;
+    readonly [RelationKeys]?: 'agendamento' | 'historico' | 'usuario';
+  };
+  export type public_SolicitacaoReagendamento = {
+    agendamentoId: FieldOutputTypes['public']['SolicitacaoReagendamento']['agendamentoId'];
+    createdAt: FieldOutputTypes['public']['SolicitacaoReagendamento']['createdAt'];
+    dataHoraSugerida: FieldOutputTypes['public']['SolicitacaoReagendamento']['dataHoraSugerida'];
+    id: FieldOutputTypes['public']['SolicitacaoReagendamento']['id'];
+    motivo: FieldOutputTypes['public']['SolicitacaoReagendamento']['motivo'];
+    respondidoEm: FieldOutputTypes['public']['SolicitacaoReagendamento']['respondidoEm'];
+    respondidoPorId: FieldOutputTypes['public']['SolicitacaoReagendamento']['respondidoPorId'];
+    status: FieldOutputTypes['public']['SolicitacaoReagendamento']['status'];
+    statusAnterior: FieldOutputTypes['public']['SolicitacaoReagendamento']['statusAnterior'];
+    updatedAt: FieldOutputTypes['public']['SolicitacaoReagendamento']['updatedAt'];
+    agendamento: public_Agendamento;
+    respondidoPor: public_Usuario | null;
+    readonly [RelationKeys]?: 'agendamento' | 'respondidoPor';
+  };
   export type public_TokenRevogado = {
     expiresAt: FieldOutputTypes['public']['TokenRevogado']['expiresAt'];
     jti: FieldOutputTypes['public']['TokenRevogado']['jti'];
@@ -335,18 +424,39 @@ export namespace Models {
     senha: FieldOutputTypes['public']['Usuario']['senha'];
     updatedAt: FieldOutputTypes['public']['Usuario']['updatedAt'];
     agendamentos: public_Agendamento[];
+    atendimentos: public_Agendamento[];
+    bloqueios: public_BloqueioMassagista[];
+    confirmacoes: public_Agendamento[];
+    historicosAgendamento: public_AgendamentoHistorico[];
+    horariosTrabalho: public_HorarioTrabalho[];
     massagistas: public_MassagistaMassagem[];
-    readonly [RelationKeys]?: 'agendamentos' | 'massagistas';
+    notificacoes: public_Notificacao[];
+    solicitacoesRespondidas: public_SolicitacaoReagendamento[];
+    readonly [RelationKeys]?:
+      | 'agendamentos'
+      | 'atendimentos'
+      | 'bloqueios'
+      | 'confirmacoes'
+      | 'historicosAgendamento'
+      | 'horariosTrabalho'
+      | 'massagistas'
+      | 'notificacoes'
+      | 'solicitacoesRespondidas';
   };
 }
 
 export declare const models: {
   public: {
     Agendamento: Models.public_Agendamento;
+    AgendamentoHistorico: Models.public_AgendamentoHistorico;
+    BloqueioMassagista: Models.public_BloqueioMassagista;
+    HorarioTrabalho: Models.public_HorarioTrabalho;
     Massagem: Models.public_Massagem;
     MassagemMaterial: Models.public_MassagemMaterial;
     MassagistaMassagem: Models.public_MassagistaMassagem;
     Material: Models.public_Material;
+    Notificacao: Models.public_Notificacao;
+    SolicitacaoReagendamento: Models.public_SolicitacaoReagendamento;
     TokenRevogado: Models.public_TokenRevogado;
     Usuario: Models.public_Usuario;
   };
@@ -372,6 +482,19 @@ type ContractBase = Omit<
           readonly table: {
             readonly Agendamento: {
               columns: {
+                readonly confirmadoEm: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly confirmadoPorId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
                 readonly createdAt: {
                   readonly dataType: 'pg/timestamp';
                   readonly codecId: 'pg/timestamp-string@1';
@@ -381,9 +504,16 @@ type ContractBase = Omit<
                   readonly many: false;
                 };
                 readonly dataHora: {
-                  readonly dataType: 'pg/timestamp';
-                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
                   readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly dataHoraFim: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
                   readonly typeParams: { readonly precision: 3 };
                   readonly many: false;
                 };
@@ -395,6 +525,25 @@ type ContractBase = Omit<
                     readonly kind: 'function';
                     readonly expression: 'autoincrement()';
                   };
+                  readonly many: false;
+                };
+                readonly lembrete24hEnviadoEm: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly massagemId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly massagistaId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
                   readonly many: false;
                 };
                 readonly observacoes: {
@@ -409,7 +558,7 @@ type ContractBase = Omit<
                   readonly nullable: false;
                   readonly default: {
                     readonly kind: 'literal';
-                    readonly value: DefaultLiteralValue<'pg/text@1', 'pendente'>;
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'PENDENTE'>;
                   };
                   readonly many: false;
                 };
@@ -429,12 +578,277 @@ type ContractBase = Omit<
               };
               primaryKey: { readonly columns: readonly ['id'] };
               uniques: readonly [];
-              indexes: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'Agendamento_massagistaId_dataHora_idx';
+                  readonly columns: readonly ['massagistaId', 'dataHora'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'Agendamento_status_dataHora_idx';
+                  readonly columns: readonly ['status', 'dataHora'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'Agendamento_usuarioId_dataHora_idx';
+                  readonly columns: readonly ['usuarioId', 'dataHora'];
+                  readonly unique: false;
+                },
+              ];
               foreignKeys: readonly [
                 {
                   readonly source: {
                     readonly namespaceId: 'public' & NamespaceId;
                     readonly tableName: 'Agendamento';
+                    readonly columns: readonly ['usuarioId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Usuario';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Agendamento';
+                    readonly columns: readonly ['massagemId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Massagem';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Agendamento';
+                    readonly columns: readonly ['massagistaId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Usuario';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Agendamento';
+                    readonly columns: readonly ['confirmadoPorId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Usuario';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly AgendamentoHistorico: {
+              columns: {
+                readonly acao: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly agendamentoId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly autorId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                  readonly many: false;
+                };
+                readonly valoresAnteriores: {
+                  readonly dataType: 'pg/jsonb';
+                  readonly codecId: 'pg/jsonb@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly valoresNovos: {
+                  readonly dataType: 'pg/jsonb';
+                  readonly codecId: 'pg/jsonb@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'AgendamentoHistorico_agendamentoId_createdAt_idx';
+                  readonly columns: readonly ['agendamentoId', 'createdAt'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'AgendamentoHistorico';
+                    readonly columns: readonly ['agendamentoId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Agendamento';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'AgendamentoHistorico';
+                    readonly columns: readonly ['autorId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Usuario';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly BloqueioMassagista: {
+              columns: {
+                readonly dataHoraFim: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly dataHoraInicio: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                  readonly many: false;
+                };
+                readonly motivo: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly usuarioId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'BloqueioMassagista_usuarioId_dataHoraInicio_dataHoraFim_idx';
+                  readonly columns: readonly ['usuarioId', 'dataHoraInicio', 'dataHoraFim'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'BloqueioMassagista';
+                    readonly columns: readonly ['usuarioId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Usuario';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly HorarioTrabalho: {
+              columns: {
+                readonly diaSemana: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly fim: {
+                  readonly dataType: 'pg/varchar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 5 };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                  readonly many: false;
+                };
+                readonly inicio: {
+                  readonly dataType: 'pg/varchar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly length: 5 };
+                  readonly many: false;
+                };
+                readonly usuarioId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'HorarioTrabalho_usuarioId_diaSemana_idx';
+                  readonly columns: readonly ['usuarioId', 'diaSemana'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'HorarioTrabalho';
                     readonly columns: readonly ['usuarioId'];
                   };
                   readonly target: {
@@ -709,6 +1123,306 @@ type ContractBase = Omit<
               ];
               foreignKeys: readonly [];
             };
+            readonly Notificacao: {
+              columns: {
+                readonly agendamentoId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly chaveUnica: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly emailEnviadoEm: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly emailErro: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly emailProcessandoEm: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly emailProximaTentativaEm: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly emailStatus: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'PENDENTE'>;
+                  };
+                  readonly many: false;
+                };
+                readonly emailTentativas: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/int4@1', 0>;
+                  };
+                  readonly many: false;
+                };
+                readonly historicoId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                  readonly many: false;
+                };
+                readonly lidaEm: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly mensagem: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly tipo: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly titulo: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly usuarioId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'Notificacao_chaveUnica_key';
+                  readonly columns: readonly ['chaveUnica'];
+                  readonly unique: true;
+                },
+                {
+                  readonly name: 'Notificacao_emailStatus_emailProximaTentativaEm_idx';
+                  readonly columns: readonly ['emailStatus', 'emailProximaTentativaEm'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'Notificacao_usuarioId_lidaEm_createdAt_idx';
+                  readonly columns: readonly ['usuarioId', 'lidaEm', 'createdAt'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Notificacao';
+                    readonly columns: readonly ['usuarioId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Usuario';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Notificacao';
+                    readonly columns: readonly ['agendamentoId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Agendamento';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Notificacao';
+                    readonly columns: readonly ['historicoId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'AgendamentoHistorico';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
+            readonly SolicitacaoReagendamento: {
+              columns: {
+                readonly agendamentoId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly createdAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly dataHoraSugerida: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly id: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'function';
+                    readonly expression: 'autoincrement()';
+                  };
+                  readonly many: false;
+                };
+                readonly motivo: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly respondidoEm: {
+                  readonly dataType: 'pg/timestamptz';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly nullable: true;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+                readonly respondidoPorId: {
+                  readonly dataType: 'pg/int4';
+                  readonly codecId: 'pg/int4@1';
+                  readonly nullable: true;
+                  readonly many: false;
+                };
+                readonly status: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly default: {
+                    readonly kind: 'literal';
+                    readonly value: DefaultLiteralValue<'pg/text@1', 'PENDENTE'>;
+                  };
+                  readonly many: false;
+                };
+                readonly statusAnterior: {
+                  readonly dataType: 'pg/text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                  readonly many: false;
+                };
+                readonly updatedAt: {
+                  readonly dataType: 'pg/timestamp';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly nullable: false;
+                  readonly typeParams: { readonly precision: 3 };
+                  readonly many: false;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'SolicitacaoReagendamento_agendamentoId_idx';
+                  readonly columns: readonly ['agendamentoId'];
+                  readonly unique: false;
+                },
+                {
+                  readonly name: 'SolicitacaoReagendamento_status_createdAt_idx';
+                  readonly columns: readonly ['status', 'createdAt'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'SolicitacaoReagendamento';
+                    readonly columns: readonly ['agendamentoId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Agendamento';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'SolicitacaoReagendamento';
+                    readonly columns: readonly ['respondidoPorId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'Usuario';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
             readonly TokenRevogado: {
               columns: {
                 readonly expiresAt: {
@@ -818,6 +1532,18 @@ type ContractBase = Omit<
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'Agendamento';
     };
+    readonly AgendamentoHistorico: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'AgendamentoHistorico';
+    };
+    readonly BloqueioMassagista: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'BloqueioMassagista';
+    };
+    readonly HorarioTrabalho: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'HorarioTrabalho';
+    };
     readonly Massagem: { readonly namespace: 'public' & NamespaceId; readonly model: 'Massagem' };
     readonly MassagemMaterial: {
       readonly namespace: 'public' & NamespaceId;
@@ -828,6 +1554,14 @@ type ContractBase = Omit<
       readonly model: 'MassagistaMassagem';
     };
     readonly Material: { readonly namespace: 'public' & NamespaceId; readonly model: 'Material' };
+    readonly Notificacao: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'Notificacao';
+    };
+    readonly SolicitacaoReagendamento: {
+      readonly namespace: 'public' & NamespaceId;
+      readonly model: 'SolicitacaoReagendamento';
+    };
     readonly TokenRevogado: {
       readonly namespace: 'public' & NamespaceId;
       readonly model: 'TokenRevogado';
@@ -840,6 +1574,18 @@ type ContractBase = Omit<
         readonly models: {
           readonly Agendamento: {
             readonly fields: {
+              readonly confirmadoEm: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly confirmadoPorId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
               readonly createdAt: {
                 readonly nullable: false;
                 readonly type: {
@@ -852,12 +1598,36 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: {
                   readonly kind: 'scalar';
-                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly dataHoraFim: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
                   readonly typeParams: { readonly precision: 3 };
                 };
               };
               readonly id: {
                 readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly lembrete24hEnviadoEm: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly massagemId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly massagistaId: {
+                readonly nullable: true;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
               };
               readonly observacoes: {
@@ -882,6 +1652,75 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly confirmadoPor: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['confirmadoPorId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly historico: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'AgendamentoHistorico';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['agendamentoId'];
+                };
+              };
+              readonly massagem: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Massagem';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['massagemId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly massagista: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['massagistaId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly notificacoes: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Notificacao';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['agendamentoId'];
+                };
+              };
+              readonly solicitacoes: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'SolicitacaoReagendamento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['agendamentoId'];
+                };
+              };
               readonly usuario: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -899,12 +1738,218 @@ type ContractBase = Omit<
               readonly table: 'Agendamento';
               readonly namespaceId: 'public';
               readonly fields: {
+                readonly confirmadoEm: { readonly column: 'confirmadoEm' };
+                readonly confirmadoPorId: { readonly column: 'confirmadoPorId' };
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly dataHora: { readonly column: 'dataHora' };
+                readonly dataHoraFim: { readonly column: 'dataHoraFim' };
                 readonly id: { readonly column: 'id' };
+                readonly lembrete24hEnviadoEm: { readonly column: 'lembrete24hEnviadoEm' };
+                readonly massagemId: { readonly column: 'massagemId' };
+                readonly massagistaId: { readonly column: 'massagistaId' };
                 readonly observacoes: { readonly column: 'observacoes' };
                 readonly status: { readonly column: 'status' };
                 readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly usuarioId: { readonly column: 'usuarioId' };
+              };
+            };
+          };
+          readonly AgendamentoHistorico: {
+            readonly fields: {
+              readonly acao: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly agendamentoId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly autorId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly valoresAnteriores: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/jsonb@1' };
+              };
+              readonly valoresNovos: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/jsonb@1' };
+              };
+            };
+            readonly relations: {
+              readonly agendamento: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Agendamento';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['agendamentoId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly autor: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['autorId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly notificacoes: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Notificacao';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['historicoId'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'AgendamentoHistorico';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly acao: { readonly column: 'acao' };
+                readonly agendamentoId: { readonly column: 'agendamentoId' };
+                readonly autorId: { readonly column: 'autorId' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly id: { readonly column: 'id' };
+                readonly valoresAnteriores: { readonly column: 'valoresAnteriores' };
+                readonly valoresNovos: { readonly column: 'valoresNovos' };
+              };
+            };
+          };
+          readonly BloqueioMassagista: {
+            readonly fields: {
+              readonly dataHoraFim: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly dataHoraInicio: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly motivo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly usuarioId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly massagista: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['usuarioId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'BloqueioMassagista';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly dataHoraFim: { readonly column: 'dataHoraFim' };
+                readonly dataHoraInicio: { readonly column: 'dataHoraInicio' };
+                readonly id: { readonly column: 'id' };
+                readonly motivo: { readonly column: 'motivo' };
+                readonly usuarioId: { readonly column: 'usuarioId' };
+              };
+            };
+          };
+          readonly HorarioTrabalho: {
+            readonly fields: {
+              readonly diaSemana: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly fim: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 5 };
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly inicio: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'sql/varchar@1';
+                  readonly typeParams: { readonly length: 5 };
+                };
+              };
+              readonly usuarioId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly massagista: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['usuarioId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'HorarioTrabalho';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly diaSemana: { readonly column: 'diaSemana' };
+                readonly fim: { readonly column: 'fim' };
+                readonly id: { readonly column: 'id' };
+                readonly inicio: { readonly column: 'inicio' };
                 readonly usuarioId: { readonly column: 'usuarioId' };
               };
             };
@@ -957,6 +2002,17 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly agendamentos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Agendamento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['massagemId'];
+                };
+              };
               readonly massagistas: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -1159,6 +2215,265 @@ type ContractBase = Omit<
               };
             };
           };
+          readonly Notificacao: {
+            readonly fields: {
+              readonly agendamentoId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly chaveUnica: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly emailEnviadoEm: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly emailErro: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly emailProcessandoEm: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly emailProximaTentativaEm: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly emailStatus: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly emailTentativas: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly historicoId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly lidaEm: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly mensagem: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly tipo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly titulo: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly usuarioId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+            };
+            readonly relations: {
+              readonly agendamento: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Agendamento';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['agendamentoId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly historico: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'AgendamentoHistorico';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['historicoId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly usuario: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['usuarioId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'Notificacao';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly agendamentoId: { readonly column: 'agendamentoId' };
+                readonly chaveUnica: { readonly column: 'chaveUnica' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly emailEnviadoEm: { readonly column: 'emailEnviadoEm' };
+                readonly emailErro: { readonly column: 'emailErro' };
+                readonly emailProcessandoEm: { readonly column: 'emailProcessandoEm' };
+                readonly emailProximaTentativaEm: { readonly column: 'emailProximaTentativaEm' };
+                readonly emailStatus: { readonly column: 'emailStatus' };
+                readonly emailTentativas: { readonly column: 'emailTentativas' };
+                readonly historicoId: { readonly column: 'historicoId' };
+                readonly id: { readonly column: 'id' };
+                readonly lidaEm: { readonly column: 'lidaEm' };
+                readonly mensagem: { readonly column: 'mensagem' };
+                readonly tipo: { readonly column: 'tipo' };
+                readonly titulo: { readonly column: 'titulo' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+                readonly usuarioId: { readonly column: 'usuarioId' };
+              };
+            };
+          };
+          readonly SolicitacaoReagendamento: {
+            readonly fields: {
+              readonly agendamentoId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly dataHoraSugerida: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly motivo: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly respondidoEm: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+              readonly respondidoPorId: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int4@1' };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly statusAnterior: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly updatedAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamp-string@1';
+                  readonly typeParams: { readonly precision: 3 };
+                };
+              };
+            };
+            readonly relations: {
+              readonly agendamento: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Agendamento';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['agendamentoId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+              readonly respondidoPor: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Usuario';
+                };
+                readonly cardinality: 'N:1';
+                readonly nullable: true;
+                readonly on: {
+                  readonly localFields: readonly ['respondidoPorId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'SolicitacaoReagendamento';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly agendamentoId: { readonly column: 'agendamentoId' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly dataHoraSugerida: { readonly column: 'dataHoraSugerida' };
+                readonly id: { readonly column: 'id' };
+                readonly motivo: { readonly column: 'motivo' };
+                readonly respondidoEm: { readonly column: 'respondidoEm' };
+                readonly respondidoPorId: { readonly column: 'respondidoPorId' };
+                readonly status: { readonly column: 'status' };
+                readonly statusAnterior: { readonly column: 'statusAnterior' };
+                readonly updatedAt: { readonly column: 'updatedAt' };
+              };
+            };
+          };
           readonly TokenRevogado: {
             readonly fields: {
               readonly expiresAt: {
@@ -1236,6 +2551,61 @@ type ContractBase = Omit<
                   readonly targetFields: readonly ['usuarioId'];
                 };
               };
+              readonly atendimentos: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Agendamento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['massagistaId'];
+                };
+              };
+              readonly bloqueios: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'BloqueioMassagista';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['usuarioId'];
+                };
+              };
+              readonly confirmacoes: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Agendamento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['confirmadoPorId'];
+                };
+              };
+              readonly historicosAgendamento: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'AgendamentoHistorico';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['autorId'];
+                };
+              };
+              readonly horariosTrabalho: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'HorarioTrabalho';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['usuarioId'];
+                };
+              };
               readonly massagistas: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -1245,6 +2615,28 @@ type ContractBase = Omit<
                 readonly on: {
                   readonly localFields: readonly ['id'];
                   readonly targetFields: readonly ['usuarioId'];
+                };
+              };
+              readonly notificacoes: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'Notificacao';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['usuarioId'];
+                };
+              };
+              readonly solicitacoesRespondidas: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'SolicitacaoReagendamento';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['respondidoPorId'];
                 };
               };
             };
@@ -1321,6 +2713,24 @@ type ContractBase = Omit<
           readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
           readonly ref: {
             readonly entry: 'Material';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'Notificacao';
+            readonly field: 'updatedAt';
+            readonly namespace: 'public';
+          };
+        },
+        {
+          readonly onCreate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly onUpdate: { readonly id: 'timestampStringNow'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly entry: 'SolicitacaoReagendamento';
             readonly field: 'updatedAt';
             readonly namespace: 'public';
           };
